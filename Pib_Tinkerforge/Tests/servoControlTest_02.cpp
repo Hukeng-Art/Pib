@@ -20,9 +20,13 @@ int main(void) {
 	
 	std::string usr_input = "";
 	
+	int n;
+	
+	bool valid_input = false;
+	bool command_enabled = true;
+	
 	bool enable = true;
 	bool disable = false;
-	
 	bool* ret_enable = &enable;
 	
 	// Create IP connections to bricklets
@@ -55,58 +59,67 @@ int main(void) {
         return 1;
     }
     
-    
-    // check if servo channels are enabled
-    if (true) {
-		std::cout << "\nChecking servo channels - this might take a while\n\n";
-		for (int i = 0; i < 10; i++) {
-			std::cout << "Bricklet 1 - servo " << i << " ";
-			
-			if (!servo_v2_get_enabled(&bricklet_1, i, ret_enable)) {
-				
-				std::cout << "not ";
-			}
-			
-			std:: cout << "enabled\n";
-			
-		}
-		std::cout << "\n";
-		for (int i = 0; i < 10; i++) {
-			std::cout << "Bricklet 2 - servo " << i << " ";
-			
-			if (!servo_v2_get_enabled(&bricklet_1, i, ret_enable)) {
-				
-				std::cout << "not ";
-			}
-			
-			std:: cout << "enabled\n";
-		}
-		std::cout << "\n";
-		for (int i = 0; i < 10; i++) {
-			std::cout << "Bricklet 3 - servo " << i << " ";
-			
-			if (!servo_v2_get_enabled(&bricklet_1, i, ret_enable)) {
-				
-				std::cout << "not ";
-			}
-			
-			std:: cout << "enabled\n";
-		}
+	// set servos to default pos (0)
+	for (int i = 0; i < 10; i++) {
+		// set servo params (pib default)
+		servo_v2_set_degree(&bricklet_1, i, -9000, 9000);
+		servo_v2_set_pulse_width(&bricklet_1, i, 700, 2500);
+		servo_v2_set_period(&bricklet_1, i, 19500);
+		servo_v2_set_motion_configuration(&bricklet_1, i, 100000, 50000, 50000);
 		
-		std::cout << "\n";
+		servo_v2_set_position(&bricklet_1, i, 0);
+		servo_v2_set_enable(&bricklet_1, i, true);   // Pass order to bricklet
+	}
+	for (int i = 0; i < 10; i++) {
+		// set servo params (pib default)
+		servo_v2_set_degree(&bricklet_2, i, -9000, 9000);
+		servo_v2_set_pulse_width(&bricklet_2, i, 700, 2500);
+		servo_v2_set_period(&bricklet_2, i, 19500);
+		servo_v2_set_motion_configuration(&bricklet_2, i, 100000, 50000, 50000);
+		
+		servo_v2_set_position(&bricklet_2, i, 0);
+		servo_v2_set_enable(&bricklet_2, i, true);   // Pass order to bricklet
+	}
+	for (int i = 0; i < 10; i++) {
+		// set servo params (pib default)
+		servo_v2_set_degree(&bricklet_3, i, -9000, 9000);
+		servo_v2_set_pulse_width(&bricklet_3, i, 700, 2500);
+		servo_v2_set_period(&bricklet_3, i, 19500);
+		servo_v2_set_motion_configuration(&bricklet_3, i, 100000, 50000, 50000);
+		
+		servo_v2_set_position(&bricklet_3, i, 0);
+		servo_v2_set_enable(&bricklet_3, i, true);   // Pass order to bricklet
 	}
 	
 	
 	/// SERVO CONTROL TESTS ///
+	while (command_enabled) {
+		
+		while (!valid_input) {
+			std::cout << "Please enter an integer value between -9000 and 9000. Press q to quit\n";
+			std::cin >> usr_input;
+		
+			if (usr_input == "q") {
+				command_enabled = false;
+				break;
+			}
+		
+			try {
+				n = stoi(usr_input); 
+				valid_input = true;
+			} catch (std::invalid_argument) {
+				std::cout << "Invalid input. ";
+			}
+		
+		}
 	
-	// set servo params (pib default)
-	servo_v2_set_degree(&bricklet_1, 2, -9000, 9000);
-    servo_v2_set_pulse_width(&bricklet_1, 2, 700, 2500);
-    servo_v2_set_period(&bricklet_1, 2, 19500);
-    servo_v2_set_motion_configuration(&bricklet_1, 2, 100000, 50000, 50000); // 0.2 max velocity with max ac-/deceleration
+		servo_v2_set_position(&bricklet_1, 2, n);
+		servo_v2_set_enable(&bricklet_1, 2, true);
+		
+		valid_input = false;
+	}
     
-    servo_v2_set_position(&bricklet_1, 2, -9000); // Set to most right position
-    servo_v2_set_enable(&bricklet_1, 2, true);   // Pass order to bricklet
+  
 	
 	/// SERVO CONTROL TESTS END ///
 	
