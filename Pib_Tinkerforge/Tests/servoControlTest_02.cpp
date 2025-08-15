@@ -22,6 +22,9 @@ int main(void) {
 	
 	int n;
 	
+	short int ret_position = 0;
+	short int* ret_position_ptr = &ret_position;
+	
 	bool valid_input = false;
 	bool command_enabled = true;
 	
@@ -96,19 +99,27 @@ int main(void) {
 	while (command_enabled) {
 		
 		while (!valid_input) {
-			std::cout << "Please enter an integer value between -9000 and 9000. Press q to quit\n";
+			std::cout << "Please enter an integer value between -9000 and 9000. Press q to quit. Press d for diagnostic info.\n";
 			std::cin >> usr_input;
 		
-			if (usr_input == "q") {
+			if (usr_input == "q") {        // quit interactive moe
 				command_enabled = false;
 				break;
-			}
-		
-			try {
-				n = stoi(usr_input); 
-				valid_input = true;
-			} catch (std::invalid_argument) {
-				std::cout << "Invalid input. ";
+			} else if (usr_input == "d") { // print diagnostics for current servo 
+				int current_pos = servo_v2_get_current_position(&bricklet_1, 2, ret_position_ptr);
+				std::cout << "Current servo position: " << current_pos << "\n";
+				
+				int current_vel = servo_v2_get_current_velocity(&bricklet_1, 2, ret_position_ptr);
+				std::cout << "Current servo velocity: " << current_pos << "\n";
+				
+			} else {
+				try {
+					n = stoi(usr_input); 
+					valid_input = true;
+				} catch (std::invalid_argument) {
+					std::cout << "Invalid input. ";
+				}
+				
 			}
 		
 		}
