@@ -50,22 +50,21 @@ int main(void) {
 	servo_v2_create(&bricklet_3, BRICKLET_3_UID, &ipcon_b3);
 	
 	
-	if(ipcon_connect(&ipcon_b1, HOST, PORT) < 0) {
+	if(ipcon_connect(&ipcon_b1, HOST, PORT) < E_OK) {
         fprintf(stderr, "Could not connect - ipcon for b1 failed\n");
         return 1;
     }
-    if(ipcon_connect(&ipcon_b2, HOST, PORT) < 0) {
+    if(ipcon_connect(&ipcon_b2, HOST, PORT) < E_OK) {
         fprintf(stderr, "Could not connect - ipcon for b2 failed\n");
         return 1;
     }
-    if(ipcon_connect(&ipcon_b3, HOST, PORT) < 0) {
+    if(ipcon_connect(&ipcon_b3, HOST, PORT) < E_OK) {
         fprintf(stderr, "Could not connect - ipcon for b3 failed\n");
         return 1;
     }
     
-	// set servos to default pos (0)
+	// set servos to default pib params and pos 0
 	for (int i = 0; i < 10; i++) {
-		// set servo params (pib default)
 		servo_v2_set_degree(&bricklet_1, i, -9000, 9000);
 		servo_v2_set_pulse_width(&bricklet_1, i, 700, 2500);
 		servo_v2_set_period(&bricklet_1, i, 19500);
@@ -75,7 +74,6 @@ int main(void) {
 		servo_v2_set_enable(&bricklet_1, i, true);   // Pass order to bricklet
 	}
 	for (int i = 0; i < 10; i++) {
-		// set servo params (pib default)
 		servo_v2_set_degree(&bricklet_2, i, -9000, 9000);
 		servo_v2_set_pulse_width(&bricklet_2, i, 700, 2500);
 		servo_v2_set_period(&bricklet_2, i, 19500);
@@ -85,7 +83,6 @@ int main(void) {
 		servo_v2_set_enable(&bricklet_2, i, true);   // Pass order to bricklet
 	}
 	for (int i = 0; i < 10; i++) {
-		// set servo params (pib default)
 		servo_v2_set_degree(&bricklet_3, i, -9000, 9000);
 		servo_v2_set_pulse_width(&bricklet_3, i, 700, 2500);
 		servo_v2_set_period(&bricklet_3, i, 19500);
@@ -103,7 +100,7 @@ int main(void) {
 			std::cout << "Please enter a bricklet code (1-3), a servo code (0-9) and a desired position (-9000 to 9000). Type q to quit.\n";
 			std::cin >> bricklet_code >> servo_code >> requested_position;
 		
-			if (bricklet_code == "q" || servo_code == "q" || requested_position == "qQ") {        // quit interactive moe
+			if (bricklet_code == "q" || servo_code == "q" || requested_position == "q") {        // quit interactive mode
 				command_enabled = false;
 				break;
 			} else {
@@ -140,35 +137,25 @@ int main(void) {
 		}
 	
 	}
-    
-  
 	
 	/// SERVO CONTROL TESTS END ///
 	
-
-	
 	// disable servo bricklet connections
-	std::cout << "\nDisabling bricklet connections - this might take a while\n\n";
+	std::cout << "\nDisabling bricklet connections\n\n";
 	for (int i = 0; i < 10; i++) {
-		if (servo_v2_set_enable(&bricklet_1, i, false)) {
-			std::cout << "Disabled bricklet 1 - servo " << i << "\n";
-		} else {
+		if (servo_v2_set_enable(&bricklet_1, i, false) < E_OK) {
 			std::cout << "ERROR: could not disable bricklet 1 - servo " << i << "\n";
 		}
 	}
 	std::cout << "\n";
 	for (int i = 0; i < 10; i++) {
-		if (servo_v2_set_enable(&bricklet_2, i, false)) {
-			std::cout << "Disabled bricklet 2 - servo " << i << "\n";
-		} else {
+		if (servo_v2_set_enable(&bricklet_2, i, false) < E_OK) {
 			std::cout << "ERROR: could not disable bricklet 2 - servo " << i << "\n";
 		}
 	}
 	std::cout << "\n";
 	for (int i = 0; i < 10; i++) {
-		if (servo_v2_set_enable(&bricklet_3, i, false)) {
-			std::cout << "Disabled bricklet 3 - servo " << i << "\n";
-		} else {
+		if (servo_v2_set_enable(&bricklet_3, i, false) < E_OK) {
 			std::cout << "ERROR: could not disable bricklet 3 - servo " << i << "\n";
 		}
 	}
