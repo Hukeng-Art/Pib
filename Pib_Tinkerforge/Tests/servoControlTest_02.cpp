@@ -18,12 +18,13 @@
 
 int main(void) {
 	
-	std::string usr_input = "";
+	std::string bricklet_code = "";
+	std::string servo_code = "";
+	std::string requested_position = "";
 	
-	int n;
-	
-	short int ret_position = 0;
-	short int* ret_position_ptr = &ret_position;
+	int b_code;
+	int s_code;
+	int r_pos;
 	
 	bool valid_input = false;
 	bool command_enabled = true;
@@ -99,23 +100,37 @@ int main(void) {
 	while (command_enabled) {
 		
 		while (!valid_input) {
-			std::cout << "Please enter an integer value between -9000 and 9000. Press q to quit. Press d for diagnostic info.\n";
-			std::cin >> usr_input;
+			std::cout << "Please enter a bricklet code (1-3), a servo code (0-9) and a desired position (-9000 to 9000). Type q to quit.\n";
+			std::cin >> bricklet_code >> servo_code >> requested_position;
 		
-			if (usr_input == "q") {        // quit interactive moe
+			if (bricklet_code == "q" || servo_code == "q" || requested_position == "qQ") {        // quit interactive moe
 				command_enabled = false;
 				break;
-			} else if (usr_input == "d") { // print diagnostics for current servo 
-				int current_pos = servo_v2_get_current_position(&bricklet_1, 2, ret_position_ptr);
-				std::cout << "Current servo position: " << current_pos << "\n";
-				
-				int current_vel = servo_v2_get_current_velocity(&bricklet_1, 2, ret_position_ptr);
-				std::cout << "Current servo velocity: " << current_pos << "\n";
-				
 			} else {
 				try {
-					n = stoi(usr_input); 
-					valid_input = true;
+					b_code = stoi(bricklet_code);
+					s_code = stoi(servo_code);
+					r_pos = stoi(requested_position); 
+					
+					if (-1 < s_code < 10 && -9001 < r_pos < 9001) {
+						if (b_code == 1) {
+							servo_v2_set_position(&bricklet_1, s_code, r_pos);
+							servo_v2_set_enable(&bricklet_1, s_code, true);
+						} else if (b_code == 2) {
+							servo_v2_set_position(&bricklet_2, s_code, r_pos);
+							servo_v2_set_enable(&bricklet_2, s_code, true); 
+						} else if (b_code == 3) {
+							servo_v2_set_position(&bricklet_3, s_code, r_pos);
+							servo_v2_set_enable(&bricklet_3, s_code, true);
+						} else {
+							std::cout << "Invalid input. ";
+						}
+					
+					} else {
+						std::cout << "Invalid input. ";
+					}
+					
+					
 				} catch (std::invalid_argument) {
 					std::cout << "Invalid input. ";
 				}
@@ -124,26 +139,13 @@ int main(void) {
 		
 		}
 	
-		servo_v2_set_position(&bricklet_1, 2, n);
-		servo_v2_set_enable(&bricklet_1, 2, true);
-		
-		valid_input = false;
 	}
     
   
 	
 	/// SERVO CONTROL TESTS END ///
 	
-	
-    // quit program on input
-    while (true) {
-		std::cout << "Press q to exit\n";
-		std::cin >> usr_input;
-		
-		if (usr_input == "q") {
-				break;
-		}
-	}
+
 	
 	// disable servo bricklet connections
 	std::cout << "\nDisabling bricklet connections - this might take a while\n\n";
