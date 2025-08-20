@@ -48,14 +48,14 @@ class Robot {
 					throw("Ipcon connection failed");
 				}
 				
-				for (int i = 0; i < 10; i++) {
-					servo_v2_set_degree(&bricklets[i], i, -9000, 9000);
-					servo_v2_set_pulse_width(&bricklets[i], i, 700, 2500);
-					servo_v2_set_period(&bricklets[i], i, 19500);
-					servo_v2_set_motion_configuration(&bricklets[i], i, 100000, 50000, 50000);
+				for (int j = 0; j < 10; j++) {
+					servo_v2_set_degree(&bricklets[i], j, -9000, 9000);
+					servo_v2_set_pulse_width(&bricklets[i], j, 700, 2500);
+					servo_v2_set_period(&bricklets[i], j, 19500);
+					servo_v2_set_motion_configuration(&bricklets[i], j, 100000, 50000, 50000);
 					
-					servo_v2_set_position(&bricklets[i], i, 0);
-					servo_v2_set_enable(&bricklets[i], i, true);   // Pass order to bricklet
+					servo_v2_set_position(&bricklets[i], j, 0);
+					servo_v2_set_enable(&bricklets[i], j, true);   // Pass order to bricklet
 				}
 				
 			}
@@ -65,7 +65,7 @@ class Robot {
 			for (int i = 0; i < servo_uids.size(); i++) {
 				
 				std::vector<bool> new_vec;
-				for (int i = 0; i < 10; i++) {
+				for (int j = 0; j < 10; j++) {
 					new_vec.push_back(false);
 				}
 				
