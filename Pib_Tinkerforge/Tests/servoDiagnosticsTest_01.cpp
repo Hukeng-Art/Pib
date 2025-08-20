@@ -26,7 +26,8 @@ int main(void) {
 	int s_code;
 	int r_pos;
 	
-	int16_t* ret_pos;
+	int16_t ret;
+	int16_t* ret_pos = &ret;
 	
 	bool valid_input = false;
 	bool command_enabled = true;
@@ -142,14 +143,12 @@ int main(void) {
 	
 	/// SERVO CONTROL TESTS END ///
 	
-	for (int i = 0; i< 10; i++) {
+	for (int i = 0; i < 10; i++) {
+		
 		servo_v2_get_position(&bricklet_1, i, ret_pos);
-		std::cout << "Position of b2 s" << i << ": " << ret_pos;
+		std::cout << "Position of b1 s" << i << ": " << ret << "\n";
 	}
 	
-	servo_v2_get_position(&bricklet_1, 2, ret_pos);
-	
-	std::cout << "Position of b2 s1: " << ret_pos;
 	
 	// disable servo bricklet connections
 	std::cout << "\nDisabling bricklet connections\n\n";
