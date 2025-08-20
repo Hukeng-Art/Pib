@@ -1,6 +1,8 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
+
 
 #include "../Resources/ip_connection.h"
 #include "../Resources/brick_hat.h"
@@ -8,6 +10,7 @@
 
 #define HOST "localhost"
 #define PORT 4223
+
 
 // Basic class for Robot controlled via Tinkerforge brick hat and servo bricklet v2 hardware
 class Robot {
@@ -95,26 +98,43 @@ class Robot {
 		
 		// set servo positions
 		
-		int set_servo_pos(int b_code, int s_code, int pos) {
-			servo_v2_set_position(&bricklets[b_code], s_code, pos);
-			servo_v2_set_enable(&bricklets[b_code], s_code, true);
+		int set_servo_pos(int bricklet, int servo, int pos) {
+			servo_v2_set_position(&bricklets[bricklet], servo, pos);
+			servo_v2_set_enable(&bricklets[bricklet], servo, true);
 			return 0;
 		}
 		
 		// get all relevant information on a specific servo
 		// TO DO: CHANGE OUTPUT TO SOMETHING MANAGEABLE (e.g. DIAGNOSTIC INFO STRUCT)
-		int get_servo_pos(int bricklet, int servo) {
-				return 0;
+		int get_servo_pos(int b, int s) {
+			int16_t ret;
+			int16_t* ret_pos = &ret;
+			ServoV2* bricklet_pos = &bricklets[b];
+			
+			servo_v2_get_position(bricklet_pos, s, ret_pos);
+			
+			return ret;
 		}
 		
 		// return servo bricklet vector
-		
+		// ONLY FOR TESTING - BRICKLET POINTERS SHOULD BE PRIVATE
+		/*
 		std::vector<ServoV2> get_bricklets() {
 			return bricklets;
 		}
+		*/
+		
+		// return ipcon vector
+		// ONLY FOR TESTING - IPCON POINTERS SHOULD BE PRIVATE
+		/*
+		std::vector<IPConnection> get_ipcons() {
+			return ipcons;
+		}
+		*/
 		
 		// save current position to csv file.
-		int save_current_position(std::string save_file) {
+		// TO DO: fstream implementation
+		int save_pose(std::string save_file) {
 			std::string save_str = "";
 			
 			for (int i = 0; i < bricklets.size(); i++) {
@@ -128,5 +148,9 @@ class Robot {
 			return 0;
 		}
 	
+	
+		int load_pose(std::string save_file) {
+			return 0;
+		}
 	
 };

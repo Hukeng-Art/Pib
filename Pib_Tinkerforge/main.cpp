@@ -49,7 +49,7 @@ int main() {
 					s_code = stoi(servo_code);
 					r_pos = stoi(requested_position); 
 					
-					if (-1 < b_code < pib.get_bricklets().size() && -1 < s_code < 10 && -9001 < r_pos < 9001) {
+					if (-1 < b_code < 2 && -1 < s_code < 10 && -9001 < r_pos < 9001) {
 						pib.set_servo_pos(b_code, s_code, r_pos);
 					} else {
 						std::cout << "Invalid input. ";
