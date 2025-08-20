@@ -109,7 +109,7 @@ class Robot {
 		
 		// return servo bricklet vector
 		
-		vector<ServoV> get_bricklets() {
+		std::vector<ServoV2> get_bricklets() {
 			return bricklets;
 		}
 		
@@ -119,11 +119,13 @@ class Robot {
 			
 			for (int i = 0; i < bricklets.size(); i++) {
 				for (int j = 0; j < 10; j++) {
-					save_str += to_string(get_servo_pos(i,j);
+					save_str += std::to_string(get_servo_pos(i,j));
 				}
 				
 				save_str += "\n";
 			}
+			
+			return 0;
 		}
 	
 	
