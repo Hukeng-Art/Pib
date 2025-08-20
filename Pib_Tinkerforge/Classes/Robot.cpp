@@ -102,7 +102,7 @@ class Robot {
 		}
 		
 		// get all relevant information on a specific servo
-		// TO DO: CHANGE OUTPUT TO  DIAGNOSTIC INFO STRUCT
+		// TO DO: CHANGE OUTPUT TO SOMETHING MANAGEABLE (e.g. DIAGNOSTIC INFO STRUCT)
 		int get_servo_pos(int bricklet, int servo) {
 				return 0;
 		}
