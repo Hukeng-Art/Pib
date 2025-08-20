@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 
 #include "../Resources/ip_connection.h"
 #include "../Resources/brick_hat.h"
@@ -24,7 +25,7 @@ class Robot {
 	public:
 	
 		// constructor
-		Robot(std::string info) {
+		Robot(std::string info_path) {
 			
 			// TO DO: import robot info from info.txt
 			std::vector<std::string> servo_uids = {"2cPS","2cPT","SGA"};
@@ -102,8 +103,27 @@ class Robot {
 		
 		// get all relevant information on a specific servo
 		// TO DO: CHANGE OUTPUT TO  DIAGNOSTIC INFO STRUCT
-		int get_servo_info(int bricklet, int servo) {
+		int get_servo_pos(int bricklet, int servo) {
 				return 0;
+		}
+		
+		// return servo bricklet vector
+		
+		vector<ServoV> get_bricklets() {
+			return bricklets;
+		}
+		
+		// save current position to csv file.
+		int save_current_position(std::string save_file) {
+			std::string save_str = "";
+			
+			for (int i = 0; i < bricklets.size(); i++) {
+				for (int j = 0; j < 10; j++) {
+					save_str += to_string(get_servo_pos(i,j);
+				}
+				
+				save_str += "\n";
+			}
 		}
 	
 	
