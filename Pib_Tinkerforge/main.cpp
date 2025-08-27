@@ -3,19 +3,16 @@
 #include <chrono>
 #include <thread>
 
-#include "Classes/ServoControl.cpp"
+#include "Classes/Robot.cpp"
 
 
 using namespace std;
 
 
-
-
-
 int main() {
 	
 	// instantiate robot
-	ServoControl pib("a");
+	Robot pib("a");
 	
 	// Vars for command input
 	std::string bricklet_code = "";
@@ -50,7 +47,7 @@ int main() {
 					r_pos = stoi(requested_position); 
 					
 					if (-1 < b_code < 2 && -1 < s_code < 10 && -9001 < r_pos < 9001) {
-						pib.set_servo_pos(b_code, s_code, r_pos);
+						pib.servos.set_servo_pos(b_code, s_code, r_pos);
 					} else {
 						std::cout << "Invalid input. ";
 					}	
