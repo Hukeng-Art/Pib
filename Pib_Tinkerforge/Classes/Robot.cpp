@@ -8,7 +8,6 @@
 #include "NetworkControl.cpp"
 
 
-
 class Robot {
 	
 		public:
@@ -20,9 +19,9 @@ class Robot {
 		
 		public:
 		
+		// constructor - instantiate contained objects via initializer list
 		Robot(std::string info_path): servos(info_path), sensors(), network() {
 			
-			std::cout << "Robot constructor called!\n";
 		}
 		
 		~Robot() {
