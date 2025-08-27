@@ -3,7 +3,7 @@
 #include <chrono>
 #include <thread>
 
-#include "Classes/Robot.cpp"
+#include "Classes/ServoControl.cpp"
 
 
 using namespace std;
@@ -15,7 +15,7 @@ using namespace std;
 int main() {
 	
 	// instantiate robot
-	Robot pib("a");
+	ServoControl pib("a");
 	
 	// Vars for command input
 	std::string bricklet_code = "";

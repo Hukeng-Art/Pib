@@ -13,7 +13,7 @@
 
 
 // Basic class for Robot controlled via Tinkerforge brick hat and servo bricklet v2 hardware
-class Robot {
+class ServoControl {
 	
 	// ATTRIBUTES
 	private:
@@ -28,7 +28,7 @@ class Robot {
 	public:
 	
 		// constructor
-		Robot(std::string info_path) {
+		ServoControl(std::string info_path) {
 			
 			// TO DO: import robot info from info.txt
 			std::vector<std::string> servo_uids = {"2cPS","2cPT","SGA"};
@@ -79,7 +79,7 @@ class Robot {
 		}
 		
 		// destructor
-		~Robot() {
+		~ServoControl() {
 			
 			std::cout << "\nDisabling bricklet connections\n\n";
 			
