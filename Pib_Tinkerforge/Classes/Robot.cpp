@@ -20,7 +20,7 @@ class Robot {
 		public:
 		
 		// constructor - instantiate contained objects via initializer list
-		Robot(std::string info_path): servos(info_path), sensors(), network() {
+		Robot(std::string settings_path): servos(settings_path), sensors(), network() {
 			
 		}
 		

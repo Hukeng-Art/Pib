@@ -21,16 +21,16 @@ class ServoControl {
 		std::vector<ServoV2> bricklets;
 		std::vector<std::vector<bool>> inversion;
 		
-		std::vector<std::string> servo_uids = {"2cPS","2cPT","SGA"};
+		std::vector<std::string> servo_uids;
 		
 		
 	// METHODS
 	public:
 	
 		// constructor
-		ServoControl(std::string info_path) {
+		ServoControl(std::string settings_path) {
 			
-			// TO DO: import robot info from info.txt
+			// TO DO: import robot info from settings.txt
 			std::vector<std::string> servo_uids = {"2cPS","2cPT","SGA"};
 			
 			// initialize IP connections and bricklets
