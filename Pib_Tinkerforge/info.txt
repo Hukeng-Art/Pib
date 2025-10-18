@@ -1,3 +1,5 @@
 #HOST localhost
 #PORT 4223
 #SERVO_UIDS 2cPS 2cPT SGA
+#INV 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+
