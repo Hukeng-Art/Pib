@@ -48,7 +48,7 @@ class ServoControl {
 				
 				// connect ipcons, interrupt execution in case of failure
 				if(ipcon_connect(&ipcons[i], HOST, PORT) < E_OK) {
-					std::cerr << "Could not connect - ipcon for bricklet " << i + 1 <<  "failed\n";
+					std::cerr << "Could not connect - ipcon for bricklet " << i << " with servo uid " << servo_uids[i] << "failed\n";
 					throw("Ipcon connection failed");
 				}
 				
@@ -60,6 +60,8 @@ class ServoControl {
 					
 					servo_v2_set_position(&bricklets[i], j, 0);
 					servo_v2_set_enable(&bricklets[i], j, true);   // Pass order to bricklet
+					
+					std::cout << "Bricklet " << i << ", Servo " << j << " activated.";
 				}
 				
 			}
