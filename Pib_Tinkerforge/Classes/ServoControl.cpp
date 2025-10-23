@@ -61,7 +61,7 @@ class ServoControl {
 					servo_v2_set_position(&bricklets[i], j, 0);
 					servo_v2_set_enable(&bricklets[i], j, true);   // Pass order to bricklet
 					
-					std::cout << "Bricklet " << i << ", Servo " << j << " activated.";
+					std::cout << "Bricklet " << i << ", Servo " << j << " activated.\n";
 				}
 				
 			}
