@@ -12,20 +12,23 @@ class Robot {
 	
 		public:
 		
-		ServoControl servos;
-		SensorControl sensors;
-		NetworkControl network;
+		ServoControl* servos;
+		SensorControl* sensors;
+		NetworkControl* network;
 	
 		
 		public:
 		
 		// constructor - instantiate contained objects via initializer list
-		Robot(std::string settings_path): servos(settings_path), sensors(), network() {
-			
+		Robot(std::string settings_path) {
+			servos = new ServoControl(settings_path);
+			sensors = new SensorControl();
+			network = new NetworkControl();	
 		}
 		
 		~Robot() {
-			
-			
+			delete servos;
+			delete sensors;
+			delete network;	
 		}
 };

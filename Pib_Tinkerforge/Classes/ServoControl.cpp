@@ -11,6 +11,8 @@
 #define HOST "localhost"
 #define PORT 4223
 
+#define BRICKLET_CONNECTIONS 10
+
 
 // Basic class for Robot controlled via Tinkerforge brick hat and servo bricklet v2 hardware
 class ServoControl {
@@ -52,7 +54,7 @@ class ServoControl {
 					throw("Ipcon connection failed");
 				}
 				
-				for (int j = 0; j < 10; j++) {
+				for (int j = 0; j < BRICKLET_CONNECTIONS; j++) {
 					servo_v2_set_degree(&bricklets[i], j, -9000, 9000);
 					servo_v2_set_pulse_width(&bricklets[i], j, 700, 2500);
 					servo_v2_set_period(&bricklets[i], j, 19500);
@@ -61,7 +63,7 @@ class ServoControl {
 					servo_v2_set_position(&bricklets[i], j, 0);
 					servo_v2_set_enable(&bricklets[i], j, true);   // Pass order to bricklet
 					
-					std::cout << "Bricklet " << i << ", Servo " << j << " activated.\n";
+					//std::cout << "Bricklet " << i << ", Servo " << j << " activated.\n";
 				}
 				
 			}
@@ -86,7 +88,7 @@ class ServoControl {
 			std::cout << "\nDisabling bricklet connections\n\n";
 			
 			for (int i = 0; i < bricklets.size(); i++) {
-				for (int j = 0; j < 10; j++) {
+				for (int j = 0; j < BRICKLET_CONNECTIONS; j++) {
 						if (servo_v2_set_enable(&bricklets[i], j, false) < E_OK) {
 						std::cout << "ERROR: could not disable bricklet " << i << " - servo " << j << "\n";
 					}
@@ -140,7 +142,7 @@ class ServoControl {
 			std::string save_str = "";
 			
 			for (int i = 0; i < bricklets.size(); i++) {
-				for (int j = 0; j < 10; j++) {
+				for (int j = 0; j < BRICKLET_CONNECTIONS; j++) {
 					save_str += std::to_string(get_servo_pos(i,j));
 				}
 				
