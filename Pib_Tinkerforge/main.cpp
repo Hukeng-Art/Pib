@@ -47,7 +47,7 @@ int main() {
 					r_pos = stoi(requested_position); 
 					
 					if (-1 < b_code < 2 && -1 < s_code < 10 && -9001 < r_pos < 9001) {
-						pib.servos.set_servo_pos(b_code, s_code, r_pos);
+						pib.servos->set_servo_pos(b_code, s_code, r_pos);
 					} else {
 						std::cout << "Invalid input. ";
 					}	

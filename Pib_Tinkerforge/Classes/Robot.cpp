@@ -21,7 +21,7 @@ class Robot {
 		
 		// constructor - instantiate contained objects via initializer list
 		Robot(std::string settings_path) {
-			servos = new ServoControl(settings_path);
+			servos = new ServoControl();
 			sensors = new SensorControl();
 			network = new NetworkControl();	
 		}

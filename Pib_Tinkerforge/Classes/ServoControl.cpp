@@ -3,26 +3,34 @@
 #include <vector>
 #include <string>
 
-
 #include "../Resources/ip_connection.h"
 #include "../Resources/brick_hat.h"
 #include "../Resources/bricklet_servo_v2.h"
+#include "../Resources/bricklet_solid_state_relay_v2.h"
 
 #define HOST "localhost"
 #define PORT 4223
 
+#define SOLID_STATE_RELAY_UID "27PE"
+#define SERVO_UID_0 "2cPS"
+#define SERVO_UID_1 "2cPT"
+#define SERVO_UID_2 "SGA"
+
 #define BRICKLET_CONNECTIONS 10
 
 
-// Basic class for Robot controlled via Tinkerforge brick hat and servo bricklet v2 hardware
+// Basic class for controlling servos via Tinkerforge servo bricklet v2 hardware
 class ServoControl {
 	
 	// ATTRIBUTES
 	private:
 		std::vector<IPConnection> ipcons;
 		std::vector<ServoV2> bricklets;
-		std::vector<std::vector<bool>> inversion;
 		
+		IPConnection ssr_ipcon;
+		SolidStateRelayV2 ssr;
+		
+		std::vector<std::vector<bool>> inversion;
 		std::vector<std::string> servo_uids;
 		
 		
@@ -30,10 +38,23 @@ class ServoControl {
 	public:
 	
 		// constructor
-		ServoControl(std::string settings_path) {
+		ServoControl() {
 			
-			// TO DO: import robot info from settings.txt
-			std::vector<std::string> servo_uids = {"2cPS","2cPT","SGA"};
+			////////////////////////////////////////////////
+			// TO DO: import robot info from settings file//
+			////////////////////////////////////////////////
+			
+			std::vector<std::string> servo_uids = {SERVO_UID_0, SERVO_UID_1, SERVO_UID_2};
+			
+			// create ipcon for solid state relay
+			ipcon_create(&ssr_ipcon);
+			solid_state_relay_v2_create(&ssr, SOLID_STATE_RELAY_UID, &ssr_ipcon);
+			
+			// Connect to brickd, interrupt execution in case of failure
+			if(ipcon_connect(&ssr_ipcon, HOST, PORT) < 0) {
+				fprintf(stderr, "Could not connect - ipcon for solid state bricklet failed\n");
+				throw("Solid state relay ipcon connection failed\n");
+			}
 			
 			// initialize IP connections and bricklets
 			for (int i = 0; i < servo_uids.size(); i++) {
@@ -51,9 +72,13 @@ class ServoControl {
 				// connect ipcons, interrupt execution in case of failure
 				if(ipcon_connect(&ipcons[i], HOST, PORT) < E_OK) {
 					std::cerr << "Could not connect - ipcon for bricklet " << i << " with servo uid " << servo_uids[i] << "failed\n";
-					throw("Ipcon connection failed");
+					throw("Ipcon connection failed\n");
 				}
 				
+				// activate ssr
+				solid_state_relay_v2_set_state(&ssr, true);
+				
+				// activate servos, set default values (pib standard, zero position)
 				for (int j = 0; j < BRICKLET_CONNECTIONS; j++) {
 					servo_v2_set_degree(&bricklets[i], j, -9000, 9000);
 					servo_v2_set_pulse_width(&bricklets[i], j, 700, 2500);
@@ -85,7 +110,7 @@ class ServoControl {
 		// destructor
 		~ServoControl() {
 			
-			std::cout << "\nDisabling bricklet connections\n\n";
+			std::cout << "\nDisabling bricklet connections\n";
 			
 			for (int i = 0; i < bricklets.size(); i++) {
 				for (int j = 0; j < BRICKLET_CONNECTIONS; j++) {
@@ -96,7 +121,14 @@ class ServoControl {
 				
 				servo_v2_destroy(&bricklets[i]);
 				ipcon_destroy(&ipcons[i]); // calls ipcon_disconnect internally
-			}		
+			}
+			
+			// turn off ssd
+			solid_state_relay_v2_set_state(&ssr, false);
+			
+			std::cout << "\nDisabling solid state relay connection.\n";
+			solid_state_relay_v2_destroy(&ssr);
+			ipcon_destroy(&ssr_ipcon); // Calls ipcon_disconnect internally	
 			
 		}
 		
@@ -151,7 +183,6 @@ class ServoControl {
 			
 			return 0;
 		}
-	
 	
 		int load_pose(std::string save_file) {
 			return 0;
