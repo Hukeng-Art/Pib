@@ -33,14 +33,15 @@ class PibRemoteApp : public SDL_application {
 	int eye_index;
 	
 	
-	// Default values - override in subclass
+	// Default values - overriden from superclass
 	const char* window_title = "Pib_Remote";
-	const char* icon = "assets/icon.png";
 	
 	
 public:
 
 	PibRemoteApp() { // Constructor
+		
+		key_states = SDL_GetKeyboardState(NULL);
 		
 		robot = new Robot("a");
 		
