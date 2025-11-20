@@ -1,1 +1,1 @@
-gcc main.cpp -o main.o -lSDL3 -lSDL3_image 
+g++ main_remote.cpp ../Pib_Tinkerforge/Resources/brick_hat.c ../Pib_Tinkerforge/Resources/bricklet_servo_v2.c ../Pib_Tinkerforge/Resources/ip_connection.c ../Pib_Tinkerforge/Resources/bricklet_solid_state_relay_v2.c -o main_remote.o -lSDL3 -lSDL3_image -lSDL3_ttf 

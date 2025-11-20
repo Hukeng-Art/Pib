@@ -40,9 +40,9 @@ class ServoControl {
 		// constructor
 		ServoControl() {
 			
-			////////////////////////////////////////////////
-			// TO DO: import robot info from settings file//
-			////////////////////////////////////////////////
+			/////////////////////////////////////////////////
+			// TO DO: import robot info from settings file //
+			/////////////////////////////////////////////////
 			
 			std::vector<std::string> servo_uids = {SERVO_UID_0, SERVO_UID_1, SERVO_UID_2};
 			
@@ -69,7 +69,7 @@ class ServoControl {
 				bricklets.push_back(new_bricklet);
 				servo_v2_create(&bricklets[i], current_uid, &ipcons[i]);
 				
-				// connect ipcons, interrupt execution in case of failure
+				// connect ipcons to brickd, interrupt execution in case of failure
 				if(ipcon_connect(&ipcons[i], HOST, PORT) < E_OK) {
 					std::cerr << "Could not connect - ipcon for bricklet " << i << " with servo uid " << servo_uids[i] << "failed\n";
 					throw("Ipcon connection failed\n");
