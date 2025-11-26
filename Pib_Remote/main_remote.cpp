@@ -1,8 +1,4 @@
-
 #include "PibRemoteApp.cpp"
-
-
-
 
 int main() {
 

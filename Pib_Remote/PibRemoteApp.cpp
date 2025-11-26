@@ -1,9 +1,4 @@
-#include <iostream>
-#include <vector>
-
-#include "../Pib_Tinkerforge/Classes/Robot.cpp"
-#include "../../SDL_Application/SDL_application.cpp"
-
+#include "PibRemoteApp.h"
 
 #define BRICKLET_NUM 3
 #define SERVO_DELAY 10
@@ -14,13 +9,9 @@
 #define INVERSION {{1,1,1,-1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1,1,1}}
 
 
-class PibRemoteApp : public SDL_application {
+class PibRemoteApp : public SDL_Application {
 	
 	const bool* key_states;
-	
-	int debug_cycle_counter = 0;
-	double debug_second_counter = 0;
-	
 	
 	Robot* robot;
 	int moving_servos[3][10];
@@ -48,7 +39,6 @@ public:
 		robot->servos->set_servo_pos(0, 8, -4500);
 		robot->servos->set_servo_pos(2, 8, -4500);
 		
-		
 		pib_eyes.push_back(IMG_LoadTexture(renderer,"assets/pibEyes/eyes01.png"));
 		pib_eyes.push_back(IMG_LoadTexture(renderer,"assets/pibEyes/eyes02.png"));
 		pib_eyes.push_back(IMG_LoadTexture(renderer,"assets/pibEyes/eyes03.png"));
@@ -63,6 +53,14 @@ public:
 	~PibRemoteApp(){ // DESTRUCTOR - CLEAN UP MEMORY
 		
 		delete robot;
+		
+		for (SDL_Texture* texture : pib_eyes) {
+			
+			if (texture) {
+				SDL_DestroyTexture(texture);
+				texture = NULL;
+			}
+		}
 		
 		
 	}

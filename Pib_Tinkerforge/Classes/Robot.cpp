@@ -1,7 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
+#include "Robot.h"
 
 #include "ServoControl.cpp"
 #include "SensorControl.cpp"
@@ -10,14 +7,14 @@
 
 class Robot {
 	
-		public:
+	public:
 		
 		ServoControl* servos;
 		SensorControl* sensors;
 		NetworkControl* network;
 	
 		
-		public:
+	public:
 		
 		// constructor - instantiate contained objects via initializer list
 		Robot(std::string settings_path) {
@@ -26,9 +23,11 @@ class Robot {
 			network = new NetworkControl();	
 		}
 		
+		
 		~Robot() {
 			delete servos;
 			delete sensors;
 			delete network;	
 		}
+		
 };
