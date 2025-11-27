@@ -5,5 +5,6 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <time.h>
 
 #endif

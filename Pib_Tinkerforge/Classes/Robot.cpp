@@ -3,6 +3,7 @@
 #include "ServoControl.cpp"
 #include "SensorControl.cpp"
 #include "NetworkControl.cpp"
+#include "Behavior.cpp"
 
 
 class Robot {
@@ -12,7 +13,8 @@ class Robot {
 		ServoControl* servos;
 		SensorControl* sensors;
 		NetworkControl* network;
-	
+		Behavior* behavior;
+		
 		
 	public:
 		
@@ -20,14 +22,37 @@ class Robot {
 		Robot(std::string settings_path) {
 			servos = new ServoControl();
 			sensors = new SensorControl();
-			network = new NetworkControl();	
+			network = new NetworkControl();
+			
+			behavior = NULL;
 		}
 		
 		
 		~Robot() {
 			delete servos;
 			delete sensors;
-			delete network;	
+			delete network;
+			
+		}
+		
+		
+		void assign_behavior(Behavior* new_behavior) { // pass specific behaviour object
+			
+			behavior = new_behavior;
+			
+			new_behavior->assign_servos(servos);
+			new_behavior->assign_sensors(sensors);
+			new_behavior->assign_network(network);
+		}
+		
+		
+		void run_behavior() {
+			if (!behavior) {
+				std::cout << "Can't run behavior - no behavior assigned!\n";
+			} else {
+				behavior->set_running_true();
+				behavior->run();
+			}
 		}
 		
 };
