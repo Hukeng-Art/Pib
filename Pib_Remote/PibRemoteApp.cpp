@@ -10,8 +10,6 @@
 
 class PibRemoteApp : public SDL_Application {
 	
-	const bool* key_states;
-	
 	Robot* robot;
 	int moving_servos[3][10];
 	int servo_positions[3][10];
@@ -29,8 +27,6 @@ class PibRemoteApp : public SDL_Application {
 public:
 
 	PibRemoteApp() { // Constructor
-		
-		key_states = SDL_GetKeyboardState(NULL);
 		
 		robot = new Robot("a");
 		
