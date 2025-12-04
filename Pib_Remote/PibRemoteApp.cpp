@@ -6,7 +6,6 @@
 
 #define SERVO_SPEED 200
 #define BLINK_DURATION 10000
-#define INVERSION {{1,1,1,-1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1,1,1}}
 
 
 class PibRemoteApp : public SDL_Application {
@@ -16,7 +15,6 @@ class PibRemoteApp : public SDL_Application {
 	Robot* robot;
 	int moving_servos[3][10];
 	int servo_positions[3][10];
-	int inversion[3][10] = INVERSION;
 	
 	std::vector<SDL_Texture*> pib_eyes;
 	
@@ -60,61 +58,11 @@ public:
 				SDL_DestroyTexture(texture);
 				texture = NULL;
 			}
-		}
-		
-		
-	}
-	
-	void run() {
-		
-		start = clock();
-		
-		while(is_running) {
-			events();
-			update();
-			draw();
 		}	
+		
 	}
 	
 private:
-
-	void events() {
-		while (SDL_PollEvent(&event)) { // poll until all events are handled
-		
-		// check struct type of event
-		// adapt action based on type
-		switch (event.type) { 
-			
-			case SDL_EVENT_QUIT: // close game
-				is_running = false;
-				break;
-			
-			default:
-				break;
-		}
-		
-		events_ext(event);
-		
-		}	
-		
-	}
-	
-	void update() {
-		
-		SDL_PumpEvents;
-				
-		update_ext();
-		
-	}
-	
-	void draw() {
-		SDL_RenderClear(renderer); // clear renderer buffer
-		
-		draw_ext(); // extended draw function for actual application
-		
-		SDL_RenderPresent(renderer);
-		
-	}
 	
 	
 	void events_ext(SDL_Event event) {
@@ -188,7 +136,7 @@ private:
 			for (int j = 0; j < 10; j++) {
 				if (moving_servos[i][j] != 0) {
 					
-					servo_positions[i][j] += SERVO_SPEED * inversion[i][j] * moving_servos[i][j];
+					servo_positions[i][j] += SERVO_SPEED * moving_servos[i][j];
 					
 					// putting everything in one statement causes unexpected behavior
 					if (servo_positions[i][j] > 9000) {
@@ -199,7 +147,6 @@ private:
 					
 					robot->servos->set_servo_pos(i, j, servo_positions[i][j]);
 					moving_servos[i][j] = 0;
-					//SDL_Delay(SERVO_DELAY);
 			
 				}
 				

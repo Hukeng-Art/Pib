@@ -40,9 +40,9 @@ class Robot {
 			
 			behavior = new_behavior;
 			
-			new_behavior->assign_servos(servos);
-			new_behavior->assign_sensors(sensors);
-			new_behavior->assign_network(network);
+			behavior->assign_servos(servos);
+			behavior->assign_sensors(sensors);
+			behavior->assign_network(network);
 		}
 		
 		

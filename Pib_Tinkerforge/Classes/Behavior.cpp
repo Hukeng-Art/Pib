@@ -19,7 +19,6 @@ class Behavior {
 		
 		
 		void run() { // run a constant refresh loop, 
-			start = clock();
 			
 			while (is_running) {
 				update_delta();
@@ -54,16 +53,16 @@ class Behavior {
 	
 	protected:
 		
-		// run a single refresh cycle, pass delta to determine time elapsed since last update
-		// call to execute behaviour refresh cycle as part of external refresh loop	
-		virtual void tick(double current_delta) {} // estend in subclass
+		// run a single refresh cycle
+		// pass delta to determine time elapsed since last update
+		// call to include Behavior refresh as part of external refresh cycle
+		// (e.g. in update() function in run() loop of SDL_Application object)
+		virtual void tick(double current_delta) {} // extend in subclass
 		
 	private:
 	
 		void update_delta() { // update delta variable (time elapsed since last refresh cycle)
-			end = clock();
-			delta = (double)(end-start) / CLOCKS_PER_SEC; // calculate duration of previous refresh cycle, set delta
-			start = clock();	
+			
 		}
 
 };

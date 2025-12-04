@@ -11,8 +11,9 @@ class ServoControl {
 		IPConnection ssr_ipcon;
 		SolidStateRelayV2 ssr;
 		
-		std::vector<std::vector<bool>> inversion;
+		std::vector<std::vector<std::int8_t>> inversion;
 		std::vector<std::string> servo_uids;
+		
 		
 		
 	// METHODS
@@ -76,15 +77,19 @@ class ServoControl {
 			
 			// initialize inversion vector
 			// TO DO: import info from info.txt
+			
 			for (int i = 0; i < servo_uids.size(); i++) {
 				
-				std::vector<bool> new_vec;
-				for (int j = 0; j < 10; j++) {
-					new_vec.push_back(false);
+				std::vector<std::int8_t> new_vec;
+				for (int j = 0; j < BRICKLET_CONNECTIONS; j++) {
+					new_vec.push_back(1);
 				}
 				
 				inversion.push_back(new_vec);
 			}
+			
+			// magic number(s) - inversion data for current build
+			inversion[0][3] = -1; 
 			
 		}
 		
@@ -116,7 +121,7 @@ class ServoControl {
 		// set servo positions
 		
 		int set_servo_pos(int bricklet, int servo, int pos) {
-			servo_v2_set_position(&bricklets[bricklet], servo, pos);
+			servo_v2_set_position(&bricklets[bricklet], servo, pos * inversion[bricklet][servo]);
 			servo_v2_set_enable(&bricklets[bricklet], servo, true);
 			return 0;
 		}
