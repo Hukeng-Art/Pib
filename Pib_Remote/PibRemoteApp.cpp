@@ -4,20 +4,21 @@
 #define SERVO_DELAY 10
 #define FINGER_SPEED_SCALE 3
 
-#define SERVO_SPEED 200
-#define BLINK_DURATION 10000
+#define SERVO_SPEED 4500
+#define BLINK_DURATION 2
+#define BREATHER_DELAY 10 // required to prevent brick hat buffer congestion
 
 
 class PibRemoteApp : public SDL_Application {
 	
 	Robot* robot;
-	int moving_servos[3][10];
-	int servo_positions[3][10];
+	int8_t moving_servos[3][10];
+	double servo_positions[3][10];
 	
 	std::vector<SDL_Texture*> pib_eyes;
 	
-	int eye_counter;
-	int eye_index;
+	double eye_counter;
+	int8_t eye_index;
 	
 	
 	// Default values - overriden from superclass
@@ -58,10 +59,10 @@ public:
 		
 	}
 	
+
 private:
 	
-	
-	void events_ext(SDL_Event event) {
+	void events_ext() {
 		
 		// upper arm
 		if (key_states[SDL_SCANCODE_E]) {
@@ -132,7 +133,7 @@ private:
 			for (int j = 0; j < 10; j++) {
 				if (moving_servos[i][j] != 0) {
 					
-					servo_positions[i][j] += SERVO_SPEED * moving_servos[i][j];
+					servo_positions[i][j] += SERVO_SPEED * moving_servos[i][j] * delta;
 					
 					// putting everything in one statement causes unexpected behavior
 					if (servo_positions[i][j] > 9000) {
@@ -141,8 +142,10 @@ private:
 						servo_positions[i][j] = -9000;
 					}
 					
-					robot->servos->set_servo_pos(i, j, servo_positions[i][j]);
+					robot->servos->set_servo_pos(i, j, (int)(servo_positions[i][j]));
 					moving_servos[i][j] = 0;
+					
+					SDL_Delay(BREATHER_DELAY);
 			
 				}
 				
@@ -154,7 +157,7 @@ private:
 			eye_counter = 0;
 			eye_index = (eye_index + 1) % pib_eyes.size();
 		} else {
-			eye_counter++;
+			eye_counter += delta;
 		}
 	}
 	
