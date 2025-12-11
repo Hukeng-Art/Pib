@@ -50,7 +50,7 @@ class Robot {
 			if (!behavior) {
 				std::cout << "Can't run behavior - no behavior assigned!\n";
 			} else {
-				behavior->set_running_true();
+				behavior->set_running(true);
 				behavior->run();
 			}
 		}

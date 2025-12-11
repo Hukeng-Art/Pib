@@ -11,9 +11,12 @@ class Behavior {
 	
 	bool is_running  = false;
 	
+	
 	public:
 	
 		Behavior() {
+			
+			delta = 0;
 
 		}
 		
@@ -43,21 +46,16 @@ class Behavior {
 		}
 		
 		
-		void set_running_true() {
-			is_running = true;
+		void set_running(bool value) {
+			is_running = value;
 		}
-		
-		void set_running_false() {
-			is_running = false;
-		}
-	
-	protected:
+
 		
 		// run a single refresh cycle
 		// pass delta to determine time elapsed since last update
 		// call to include Behavior refresh as part of external refresh cycle
 		// (e.g. in update() function in run() loop of SDL_Application object)
-		virtual void tick(double current_delta) {} // extend in subclass
+		virtual void tick(double external_delta) {} // extend in subclass
 		
 	private:
 	

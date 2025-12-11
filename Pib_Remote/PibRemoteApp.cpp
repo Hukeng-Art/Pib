@@ -1,13 +1,5 @@
 #include "PibRemoteApp.h"
 
-#define BRICKLET_NUM 3
-#define SERVO_DELAY 10
-#define FINGER_SPEED_SCALE 3
-
-#define SERVO_SPEED 4500
-#define BLINK_DURATION 2
-#define BREATHER_DELAY 10 // required to prevent brick hat buffer congestion
-
 
 class PibRemoteApp : public SDL_Application {
 	

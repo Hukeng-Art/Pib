@@ -60,24 +60,13 @@ class ServoControl {
 				// activate ssr
 				solid_state_relay_v2_set_state(&ssr, true);
 				
-				// activate servos, set default values (pib standard, zero position)
-				for (int j = 0; j < BRICKLET_CONNECTIONS; j++) {
-					servo_v2_set_degree(&bricklets[i], j, -9000, 9000);
-					servo_v2_set_pulse_width(&bricklets[i], j, 700, 2500);
-					servo_v2_set_period(&bricklets[i], j, 19500);
-					servo_v2_set_motion_configuration(&bricklets[i], j, 100000, 50000, 50000);
-					
-					servo_v2_set_position(&bricklets[i], j, 0);
-					servo_v2_set_enable(&bricklets[i], j, true);   // Pass order to bricklet
-					
-					//std::cout << "Bricklet " << i << ", Servo " << j << " activated.\n";
-				}
-				
 			}
+			
+			// activate servos, set default values (pib standard, zero position)
+			reset_servos();
 			
 			// initialize inversion vector
 			// TO DO: import info from info.txt
-			
 			for (int i = 0; i < servo_uids.size(); i++) {
 				
 				std::vector<std::int8_t> new_vec;
@@ -87,8 +76,7 @@ class ServoControl {
 				
 				inversion.push_back(new_vec);
 			}
-			
-			// magic number(s) - inversion data for current build
+			// magic number(s) - inversion data for current hardware build
 			inversion[0][3] = -1; 
 			
 		}
@@ -118,60 +106,82 @@ class ServoControl {
 			
 		}
 		
-		// set servo positions
 		
-		int set_servo_pos(int bricklet, int servo, int pos) {
+		// set servo positions
+		void set_servo_pos(uint16_t bricklet, uint16_t servo, int16_t pos) {
 			servo_v2_set_position(&bricklets[bricklet], servo, pos * inversion[bricklet][servo]);
 			servo_v2_set_enable(&bricklets[bricklet], servo, true);
-			return 0;
 		}
+		
 		
 		// get all relevant information on a specific servo
 		// TO DO: CHANGE OUTPUT TO SOMETHING MANAGEABLE (e.g. DIAGNOSTIC INFO STRUCT)
-		int get_servo_pos(int b, int s) {
+		int16_t get_servo_pos(uint16_t b, uint16_t s) {
 			int16_t ret;
-			int16_t* ret_pos = &ret;
-			ServoV2* bricklet_pos = &bricklets[b];
+			int16_t* ret_ptr = &ret;
+			ServoV2* bricklet_ptr = &bricklets[b];
 			
-			servo_v2_get_position(bricklet_pos, s, ret_pos);
+			servo_v2_get_position(bricklet_ptr, s, ret_ptr);
 			
 			return ret;
 		}
 		
-		// return servo bricklet vector
-		// ONLY FOR TESTING - BRICKLET POINTERS SHOULD BE PRIVATE
-		/*
-		std::vector<ServoV2> get_bricklets() {
-			return bricklets;
-		}
-		*/
 		
-		// return ipcon vector
-		// ONLY FOR TESTING - IPCON POINTERS SHOULD BE PRIVATE
-		/*
-		std::vector<IPConnection> get_ipcons() {
-			return ipcons;
+		// reset all servos to default parameters and zero position
+		void reset_servos() {
+			for (uint8_t i; i < bricklets.size(); i++) {
+				for (uint8_t j; j < BRICKLET_CONNECTIONS; j++) {
+					
+					set_servo_params(i,j);
+					
+					servo_v2_set_position(&bricklets[i], j, 0);
+					servo_v2_set_enable(&bricklets[i], j, true); 
+					
+				}
+			}
 		}
-		*/
+		
+		
+		// set parameters for select servo, reset to defaults if no values are passed
+		void set_servo_params(uint8_t b,
+		                      uint8_t s,
+		                      int16_t min_degree = DEFAULT_DEGREE_MIN,
+		                      int16_t max_degree = DEFAULT_DEGREE_MAX,
+		                      uint32_t min_pulse_width = DEFAULT_PULSE_WIDTH_MIN,
+		                      uint32_t max_pulse_width = DEFAULT_PULSE_WIDTH_MAX,
+		                      uint32_t period = DEFAULT_PERIOD,
+		                      uint32_t vel = DEFAULT_VEL,
+		                      uint32_t acceleration = DEFAULT_ACC,
+		                      uint32_t deceleration = DEFAULT_DEC) {
+								  
+			ServoV2 *bricklet_ptr = &bricklets[b];
+			
+			servo_v2_set_degree(bricklet_ptr, s, min_degree, max_degree);
+			servo_v2_set_pulse_width(bricklet_ptr, s, min_pulse_width, max_pulse_width);
+			servo_v2_set_period(bricklet_ptr, s, period);
+			servo_v2_set_motion_configuration(bricklet_ptr, s, vel, acceleration, deceleration);
+						
+		}
+		
 		
 		// save current position to csv file.
 		// TO DO: fstream implementation
-		int save_pose(std::string save_file) {
+		void save_pose(std::string save_file) {
 			std::string save_str = "";
 			
-			for (int i = 0; i < bricklets.size(); i++) {
-				for (int j = 0; j < BRICKLET_CONNECTIONS; j++) {
+			for (uint8_t i = 0; i < bricklets.size(); i++) {
+				for (uint8_t j = 0; j < BRICKLET_CONNECTIONS; j++) {
 					save_str += std::to_string(get_servo_pos(i,j));
 				}
 				
 				save_str += "\n";
 			}
 			
-			return 0;
 		}
-	
-		int load_pose(std::string save_file) {
-			return 0;
+
+
+		void load_pose(std::string save_file) {
+			
 		}
 	
 };
