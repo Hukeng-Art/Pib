@@ -117,6 +117,8 @@ class Animatronic : public Behavior {
 				new_command.servo = std::stoi(substring_list[3]);
 				new_command.pos = std::stoi(substring_list[4]);
 				
+				std::cout << new_command.start << "\n";
+				
 				commands.push(new_command);
 			
 			}
