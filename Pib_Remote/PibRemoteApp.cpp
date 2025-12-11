@@ -26,6 +26,9 @@ public:
 		robot->servos->set_servo_pos(0, 8, -4500);
 		robot->servos->set_servo_pos(2, 8, -4500);
 		
+		servo_positions[0][8] = -4500;
+		servo_positions[2][8] = -4500;
+		
 		pib_eyes.push_back(IMG_LoadTexture(renderer,"assets/pibEyes/eyes01.png"));
 		pib_eyes.push_back(IMG_LoadTexture(renderer,"assets/pibEyes/eyes02.png"));
 		pib_eyes.push_back(IMG_LoadTexture(renderer,"assets/pibEyes/eyes03.png"));

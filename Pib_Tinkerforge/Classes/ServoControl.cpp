@@ -39,7 +39,7 @@ class ServoControl {
 			}
 			
 			// initialize IP connections and bricklets
-			for (int i = 0; i < servo_uids.size(); i++) {
+			for (uint8_t i = 0; i < servo_uids.size(); i++) {
 				IPConnection new_ipcon;
 				ipcons.push_back(new_ipcon);
 				ipcon_create(&ipcons[i]);
@@ -67,10 +67,10 @@ class ServoControl {
 			
 			// initialize inversion vector
 			// TO DO: import info from info.txt
-			for (int i = 0; i < servo_uids.size(); i++) {
+			for (uint8_t i = 0; i < servo_uids.size(); i++) {
 				
 				std::vector<std::int8_t> new_vec;
-				for (int j = 0; j < BRICKLET_CONNECTIONS; j++) {
+				for (uint8_t j = 0; j < BRICKLET_CONNECTIONS; j++) {
 					new_vec.push_back(1);
 				}
 				
@@ -86,8 +86,8 @@ class ServoControl {
 			
 			std::cout << "\nDisabling bricklet connections\n";
 			
-			for (int i = 0; i < bricklets.size(); i++) {
-				for (int j = 0; j < BRICKLET_CONNECTIONS; j++) {
+			for (uint8_t i = 0; i < bricklets.size(); i++) {
+				for (uint8_t j = 0; j < BRICKLET_CONNECTIONS; j++) {
 						if (servo_v2_set_enable(&bricklets[i], j, false) < E_OK) {
 						std::cout << "ERROR: could not disable bricklet " << i << " - servo " << j << "\n";
 					}
@@ -108,7 +108,7 @@ class ServoControl {
 		
 		
 		// set servo positions
-		void set_servo_pos(uint16_t bricklet, uint16_t servo, int16_t pos) {
+		void set_servo_pos(uint8_t bricklet, uint8_t servo, int16_t pos) {
 			servo_v2_set_position(&bricklets[bricklet], servo, pos * inversion[bricklet][servo]);
 			servo_v2_set_enable(&bricklets[bricklet], servo, true);
 		}
@@ -116,7 +116,7 @@ class ServoControl {
 		
 		// get all relevant information on a specific servo
 		// TO DO: CHANGE OUTPUT TO SOMETHING MANAGEABLE (e.g. DIAGNOSTIC INFO STRUCT)
-		int16_t get_servo_pos(uint16_t b, uint16_t s) {
+		int16_t get_servo_pos(uint8_t b, uint8_t s) {
 			int16_t ret;
 			int16_t* ret_ptr = &ret;
 			ServoV2* bricklet_ptr = &bricklets[b];

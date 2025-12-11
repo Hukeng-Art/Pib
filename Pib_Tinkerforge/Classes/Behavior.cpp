@@ -1,16 +1,16 @@
 
 class Behavior {
 	
-	ServoControl* servos;
-	SensorControl* sensors;
-	NetworkControl* network;
-	
-	clock_t start;
-	clock_t end;
-	double delta;
-	
-	bool is_running  = false;
-	
+	protected:
+		ServoControl* servos;
+		SensorControl* sensors;
+		NetworkControl* network;
+		
+		clock_t start;
+		clock_t end;
+		double delta;
+		
+		bool is_running  = false;
 	
 	public:
 	
@@ -55,7 +55,7 @@ class Behavior {
 		// pass delta to determine time elapsed since last update
 		// call to include Behavior refresh as part of external refresh cycle
 		// (e.g. in update() function in run() loop of SDL_Application object)
-		virtual void tick(double external_delta) {} // extend in subclass
+		virtual void tick(double ext_delta) {} // extend in subclass
 		
 	private:
 	
