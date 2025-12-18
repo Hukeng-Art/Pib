@@ -55,14 +55,14 @@ class PibAnimatronic : public SDL_Application {
 		void events_ext() {
 			
 			if (key_states[SDL_SCANCODE_R]) { // reset behaviour
-				//current_animatronic->load_script("Scripts/hand_test.csv");
-				//current_animatronic->reset_time();
+				current_animatronic->load_script("Scripts/hand_test.csv");
+				current_animatronic->reset_time();
 			}
 		}
 		
 		void update_ext() {
 			
-			// robot->behavior->tick(delta);
+			robot->behavior->tick(delta);
 			
 		}
 		

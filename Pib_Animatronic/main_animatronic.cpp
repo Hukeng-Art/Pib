@@ -2,11 +2,9 @@
 
 int main() {
 
-	PibAnimatronic* animatronic = new PibAnimatronic();
+	PibAnimatronic* animatronic_application = new PibAnimatronic();
 	
-	animatronic->run();
-	
-	delete animatronic;
+	animatronic_application->run();
 	
 	return 0;
 	

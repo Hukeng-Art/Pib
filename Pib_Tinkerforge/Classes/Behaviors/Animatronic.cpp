@@ -1,5 +1,5 @@
-#include <queue>
 #include <vector>
+#include <queue>
 #include <string>
 #include <fstream>
 
@@ -34,8 +34,9 @@ class Animatronic : public Behavior {
 		
 		~Animatronic() {
 			
-			servos->reset_servos();
-			
+			if (servos) {
+				servos->reset_servos();
+			}
 		}
 		
 		
@@ -81,15 +82,16 @@ class Animatronic : public Behavior {
 		
 		
 		void load_script(std::string script_file) {
+			std::cout << script_file << "\n";
 			
 			if (!commands.empty()) {
 				commands = std::queue<animatronicCommand>();
+				std::cout << "cleared commands\n";
 			}
+			
 			
 			std::ifstream f(script_file);
 			std::string line;
-			std::string token;
-			std::vector<std::string> substring_list;
 			
 			
 			while (getline(f,line)) { // LOOP THROUGH ALL LINES
@@ -99,31 +101,36 @@ class Animatronic : public Behavior {
 				animatronicCommand new_command;
 				
 				// SPLIT FUNCTION ADAPTED FOR CSV
-				// TURN INTO UTIL LATER
+				// TO DO: REPLACE WITH DEDICATED IMPORTED STRING UTIL
 				size_t pos_start = 0;
 				size_t pos_end;
+				std::string token;
 				
 				while ((pos_end = line.find(",", pos_start)) != std::string::npos) { 
 					token = line.substr(pos_start, pos_end - pos_start);
-					pos_start = pos_end++;
+					pos_start = pos_end + 1;
 					substring_vec.push_back(token);
 				}
+				
+				std::cout << substring_vec[0];
+				
 	
 				substring_vec.push_back(line.substr(pos_start));
 				
-				new_command.start = std::stod(substring_list[0]);
-				new_command.end = std::stod(substring_list[1]);
-				new_command.bricklet = std::stoi(substring_list[2]);
-				new_command.servo = std::stoi(substring_list[3]);
-				new_command.pos = std::stoi(substring_list[4]);
-				
-				std::cout << new_command.start << "\n";
+				new_command.start = std::stod(substring_vec[0]);
+				new_command.end = std::stod(substring_vec[1]);
+				new_command.bricklet = std::stoi(substring_vec[2]);
+				new_command.servo = std::stoi(substring_vec[3]);
+				new_command.pos = std::stoi(substring_vec[4]);
 				
 				commands.push(new_command);
 			
 			}
 			
 			program_duration = commands.back().end;
+			
+			
+			std::cout << "script loaded\n";
 		}
 		
 		void reset_time() {
