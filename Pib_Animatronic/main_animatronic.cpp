@@ -6,6 +6,8 @@ int main() {
 	
 	animatronic_application->run();
 	
+	delete animatronic_application;
+	
 	return 0;
 	
 } 

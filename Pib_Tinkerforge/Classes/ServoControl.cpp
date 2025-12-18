@@ -114,8 +114,8 @@ class ServoControl {
 		}
 		
 		
-		// get all relevant information on a specific servo
-		// TO DO: CHANGE OUTPUT TO SOMETHING MANAGEABLE (e.g. DIAGNOSTIC INFO STRUCT)
+		// get position info on specific servo 
+		// position factors in inversion
 		int16_t get_servo_pos(uint8_t b, uint8_t s) {
 			int16_t ret;
 			int16_t* ret_ptr = &ret;
@@ -123,7 +123,7 @@ class ServoControl {
 			
 			servo_v2_get_position(bricklet_ptr, s, ret_ptr);
 			
-			return ret;
+			return ret * inversion[b][s];
 		}
 		
 		

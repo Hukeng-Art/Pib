@@ -5,10 +5,7 @@
 class PibAnimatronic : public SDL_Application {
 
 	Robot* robot;
-	
 	Animatronic* current_animatronic;
-	
-	Animatronic* hand_test;
 	
 	std::vector<SDL_Texture*> pib_eyes;
 	
@@ -24,21 +21,25 @@ class PibAnimatronic : public SDL_Application {
 			
 			robot = new Robot("a");
 			
-			hand_test = new Animatronic("Scripts/hand_test.csv");
+			current_animatronic = new Animatronic("Scripts/hand_test.csv");
 			
-			//current_animatronic = hand_test;
 		
 			robot->servos->set_servo_pos(0, 8, -4500);
 			robot->servos->set_servo_pos(2, 8, -4500);
 			
-			//robot->assign_behavior(hand_test);
+			robot->assign_behavior(current_animatronic);
 			
 		}
 		
 		~PibAnimatronic() {
 			
-			//delete hand_test;
+			// TO DO: Why does reset not work?
+			robot->servos->reset_servos();
+			robot->servos->set_servo_pos(0, 8, -4500);
+			robot->servos->set_servo_pos(2, 8, -4500);
+			
 			delete robot;
+			delete current_animatronic;
 			
 			for (SDL_Texture* texture : pib_eyes) {
 			
@@ -55,10 +56,11 @@ class PibAnimatronic : public SDL_Application {
 		void events_ext() {
 			
 			if (key_states[SDL_SCANCODE_R]) { // reset behaviour
-				current_animatronic->load_script("Scripts/hand_test.csv");
-				current_animatronic->reset_time();
+				current_animatronic->reset();
 			}
+			
 		}
+		
 		
 		void update_ext() {
 			
@@ -66,7 +68,7 @@ class PibAnimatronic : public SDL_Application {
 			
 		}
 		
-		void draw_ext() {}
 		
+		void draw_ext() {}
 	
 };

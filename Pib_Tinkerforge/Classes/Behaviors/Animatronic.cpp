@@ -8,26 +8,31 @@
 
 class Animatronic : public Behavior {
 	
-	std::string script;
+	std::queue<animatronicCommand> program;
+	std::queue<animatronicCommand> commands;
+	
+	std::string script_path;
 	
 	double time_since_start;
 	double program_duration;
 	
 	int iterations;
+	
 	bool looping;
 	
-	std::queue<animatronicCommand> commands;
 	
 	public:
 	
-		Animatronic(std::string script_file) {
+		Animatronic(std::string path) {
 			
-			script = script_file;
+			script_path = path;
 			
-			load_script(script);
+			load_script(script_path);
 			
-			time_since_start = 0;
+			reset();
 			
+			looping = true;
+			iterations = 0;
 				
 		}
 		
@@ -44,11 +49,9 @@ class Animatronic : public Behavior {
 			
 			time_since_start += external_delta;
 			
-			if (time_since_start > program_duration) {
-				return;
-			} 
-			
-			while (commands.front().start <= time_since_start) {
+			// loop through commands queue
+			// remove after passing to servo control
+			while (commands.front().start <= time_since_start && !commands.empty()) {
 				
 				animatronicCommand command = commands.front();
 				
@@ -56,9 +59,10 @@ class Animatronic : public Behavior {
 				
 				int16_t current_servo_pos = servos->get_servo_pos(command.bricklet, command.servo);
 				
-				uint32_t path_len = std::abs(100 * (command.pos - current_servo_pos));
+				uint32_t path_len = std::abs((command.pos - current_servo_pos));
 				
 				uint32_t required_vel = (uint32_t)(path_len / time_for_execution);
+				
 				
 				// UGLY - find better solution
 				servos->set_servo_params(command.bricklet,
@@ -74,21 +78,31 @@ class Animatronic : public Behavior {
 				
 				servos->set_servo_pos(command.bricklet, command.servo, command.pos);
 				
-				commands.push(command);
 				commands.pop();
 				
+			}
+			
+			
+			// reset after program is done
+			if (time_since_start > program_duration) {
+				if (looping) { // forever if looping
+					reset();
+				} else if (iterations > 0) { // count down remaining iterations
+					reset();
+					iterations--;
+				}
 			}
 		}
 		
 		
 		void load_script(std::string script_file) {
-			std::cout << script_file << "\n";
 			
-			if (!commands.empty()) {
-				commands = std::queue<animatronicCommand>();
-				std::cout << "cleared commands\n";
+			program_duration = 0;
+			
+			if (!program.empty()) {
+				program = std::queue<animatronicCommand>();
+				std::cout << "cleared script\n";
 			}
-			
 			
 			std::ifstream f(script_file);
 			std::string line;
@@ -112,8 +126,6 @@ class Animatronic : public Behavior {
 					substring_vec.push_back(token);
 				}
 				
-				std::cout << substring_vec[0];
-				
 	
 				substring_vec.push_back(line.substr(pos_start));
 				
@@ -123,18 +135,30 @@ class Animatronic : public Behavior {
 				new_command.servo = std::stoi(substring_vec[3]);
 				new_command.pos = std::stoi(substring_vec[4]);
 				
-				commands.push(new_command);
+				if (new_command.end > program_duration) {
+					program_duration = new_command.end;
+				}
+				
+				program.push(new_command);
 			
 			}
 			
-			program_duration = commands.back().end;
-			
-			
-			std::cout << "script loaded\n";
 		}
 		
-		void reset_time() {
+		
+		void reset() {
 			time_since_start = 0;
+			commands = program;
+		}
+		
+		
+		void set_looping(bool b) {
+			looping = b;
+		}
+		
+		
+		void set_iterations(int i) {
+			iterations = i;
 		}
 		
 };
