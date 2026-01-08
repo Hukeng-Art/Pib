@@ -21,22 +21,27 @@
 #define BRICKLET_NUM 3
 #define SERVO_SPEED 4500     // centi-degrees per second
 #define BREATHER_DELAY 10    // required to prevent brick hat buffer congestion
+#define SELECTION_DELAY 100
 
-#define FONT_PATH "/usr/share/fonts/truetype/freefont"
-#define FONT_SIZE 10
+#define FONT_PATH "/usr/share/fonts/truetype/freefont/FreeSans.ttf"
+#define FONT_SIZE 20
 #define FONT_COLOR (SDL_Color){255,255,255,255}
-#define VERTICAL_SPACING 5
-#define CELL_WIDTH 100
+#define SELECTED_COLOR (SDL_Color){0,255,0,255}
+#define VERTICAL_SPACING 10
+#define CELL_WIDTH 200
 
 
 class PibPoserApp : public SDL_Application {
 	
 	Robot* robot;
-	uint8_t moving_servos[BRICKLET_NUM][10];
+	
+	int8_t moving_servos[BRICKLET_NUM][10];
 	double servo_positions[BRICKLET_NUM][10];
 	
 	uint8_t selected_bricklet;
 	uint8_t next_bricklet;
+	
+	bool snapshot_requested;
 	
 	// text and font attributes
 	TTF_Font *font_ptr; 
@@ -57,7 +62,11 @@ class PibPoserApp : public SDL_Application {
 		void draw_ext() override;
 		
 		void draw_pos_info_surfaces();
+		void draw_selection_rect();
+		
 		void update_info_surface(uint8_t b, uint8_t s);
+		
+		void pose_snapshot();
 
 };
 

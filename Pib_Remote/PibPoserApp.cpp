@@ -13,6 +13,9 @@ PibPoserApp::PibPoserApp() {
 	next_bricklet = 0;
 	selected_bricklet = 0;
 	
+	snapshot_requested = false;
+	
+	// SDL GRAPHICS
 	// prepare font
 	font_ptr = TTF_OpenFont(FONT_PATH, FONT_SIZE);
 	
@@ -27,6 +30,7 @@ PibPoserApp::PibPoserApp() {
 			update_info_surface(i,j);
 		}
 	}
+	
 		
 }
 
@@ -53,7 +57,11 @@ PibPoserApp::~PibPoserApp() {
 void PibPoserApp::events_ext() {
 	
 	if (key_states[SDL_SCANCODE_SPACE]) {
-		next_bricklet = (next_bricklet + 1) % BRICKLET_NUM;
+		next_bricklet = (selected_bricklet + 1) % BRICKLET_NUM;
+	}
+	
+	if (key_states[SDL_SCANCODE_S]) {
+		snapshot_requested = true;
 	}
 	
 	if (key_states[SDL_SCANCODE_0]) {
@@ -64,66 +72,66 @@ void PibPoserApp::events_ext() {
 	}
 	
 	if (key_states[SDL_SCANCODE_1]) {
-		moving_servos[selected_bricklet][1] = -1;
+		moving_servos[selected_bricklet][1] = 1;
 	}
 	if (key_states[SDL_SCANCODE_Q]) {
-		moving_servos[selected_bricklet][1] = 1;
+		moving_servos[selected_bricklet][1] = -1;
 	}
 	
 	if (key_states[SDL_SCANCODE_2]) {
-		moving_servos[selected_bricklet][1] = -1;
+		moving_servos[selected_bricklet][2] = 1;
 	}
 	if (key_states[SDL_SCANCODE_W]) {
-		moving_servos[selected_bricklet][1] = 1;
+		moving_servos[selected_bricklet][2] = -1;
 	}
 	
 	if (key_states[SDL_SCANCODE_3]) {
-		moving_servos[selected_bricklet][1] = -1;
+		moving_servos[selected_bricklet][3] = 1;
 	}
 	if (key_states[SDL_SCANCODE_E]) {
-		moving_servos[selected_bricklet][1] = 1;
+		moving_servos[selected_bricklet][3] = -1;
 	}
 	
 	if (key_states[SDL_SCANCODE_4]) {
-		moving_servos[selected_bricklet][1] = -1;
+		moving_servos[selected_bricklet][4] = 1;
 	}
 	if (key_states[SDL_SCANCODE_R]) {
-		moving_servos[selected_bricklet][1] = 1;
+		moving_servos[selected_bricklet][4] = -1;
 	}
 	
 	if (key_states[SDL_SCANCODE_5]) {
-		moving_servos[selected_bricklet][1] = -1;
+		moving_servos[selected_bricklet][5] = 1;
 	}
 	if (key_states[SDL_SCANCODE_T]) {
-		moving_servos[selected_bricklet][1] = 1;
+		moving_servos[selected_bricklet][5] = -1;
 	}
 	
 	if (key_states[SDL_SCANCODE_6]) {
-		moving_servos[selected_bricklet][1] = -1;
+		moving_servos[selected_bricklet][6] = 1;
 	}
-	if (key_states[SDL_SCANCODE_Z]) {
-		moving_servos[selected_bricklet][1] = 1;
+	if (key_states[SDL_SCANCODE_Y]) { // Y and Z inverted!
+		moving_servos[selected_bricklet][6] = -1;
 	}
 	
 	if (key_states[SDL_SCANCODE_7]) {
-		moving_servos[selected_bricklet][1] = -1;
+		moving_servos[selected_bricklet][7] = 1;
 	}
 	if (key_states[SDL_SCANCODE_U]) {
-		moving_servos[selected_bricklet][1] = 1;
+		moving_servos[selected_bricklet][7] = -1;
 	}
 	
 	if (key_states[SDL_SCANCODE_8]) {
-		moving_servos[selected_bricklet][1] = -1;
+		moving_servos[selected_bricklet][8] = 1;
 	}
 	if (key_states[SDL_SCANCODE_I]) {
-		moving_servos[selected_bricklet][1] = 1;
+		moving_servos[selected_bricklet][8] = -1;
 	}
 	
 	if (key_states[SDL_SCANCODE_9]) {
-		moving_servos[selected_bricklet][1] = -1;
+		moving_servos[selected_bricklet][9] = 1;
 	}
 	if (key_states[SDL_SCANCODE_O]) {
-		moving_servos[selected_bricklet][1] = 1;
+		moving_servos[selected_bricklet][9] = -1;
 	}
 	
 }
@@ -131,7 +139,16 @@ void PibPoserApp::events_ext() {
 		
 void PibPoserApp::update_ext() {
 	
-	selected_bricklet = next_bricklet;
+	if (selected_bricklet != next_bricklet) {
+		selected_bricklet = next_bricklet;
+		SDL_Delay(SELECTION_DELAY);
+	}
+	
+	if (snapshot_requested) {
+		pose_snapshot();
+		SDL_Delay(SELECTION_DELAY);
+	}
+	
 	
 	for (int i = 0; i < BRICKLET_NUM; i++) {
 		for (int j = 0; j < 10; j++) {
@@ -149,7 +166,7 @@ void PibPoserApp::update_ext() {
 				robot->servos->set_servo_pos(i, j, (int)(servo_positions[i][j]));
 				moving_servos[i][j] = 0;
 				
-				// update position info surface texture for display
+				// update position info surface for display
 				update_info_surface(i,j);
 				
 				if (!pos_info_surfaces[i][j]) {
@@ -169,8 +186,26 @@ void PibPoserApp::update_ext() {
 
 void PibPoserApp::draw_ext() {
 	
+	draw_selection_rect();
 	draw_pos_info_surfaces();
 
+}
+
+
+void PibPoserApp::draw_selection_rect() {
+	
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	
+	SDL_FRect rect = (SDL_FRect){
+		(float)VERTICAL_SPACING + selected_bricklet * (CELL_WIDTH + VERTICAL_SPACING),
+		(float) VERTICAL_SPACING,
+		(float) CELL_WIDTH,
+		(float)(FONT_SIZE + VERTICAL_SPACING) * 10
+	};
+	
+	SDL_RenderRect(renderer, &rect);
+	
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 }
 
 
@@ -180,23 +215,45 @@ void PibPoserApp::draw_pos_info_surfaces() {
 		for (int j = 0; j < 10; j++) {
 			
 			SDL_FRect target_rect = (SDL_FRect){
-				(float)(i * CELL_WIDTH + i * VERTICAL_SPACING),
-				(float)(j * FONT_SIZE + j * VERTICAL_SPACING), 
+				(float)(VERTICAL_SPACING + i * CELL_WIDTH + i * VERTICAL_SPACING),
+				(float)(VERTICAL_SPACING + j * FONT_SIZE + j * VERTICAL_SPACING), 
 				(float)CELL_WIDTH,
 				(float)FONT_SIZE
 			};
 			
-			SDL_RenderTexture(renderer, SDL_CreateTextureFromSurface(renderer, pos_info_surfaces[i][j]), NULL, &target_rect);
+			SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, pos_info_surfaces[i][j]);
+			
+			SDL_RenderTexture(renderer, texture, NULL, &target_rect);
+			
+			SDL_DestroyTexture(texture);
 
 		}
-	}	
+	}
+	
+		
 }
 
 
 void PibPoserApp::update_info_surface(uint8_t b, uint8_t s) {
 	
 	std::string value_string = std::to_string(servo_positions[b][s]);
-	const char *value_chars = value_string.c_str();
 			
-	pos_info_surfaces[b][s] = TTF_RenderText_Blended(font_ptr, value_chars, 0, FONT_COLOR);
+	pos_info_surfaces[b][s] = TTF_RenderText_Blended(font_ptr, value_string.c_str(), 0, FONT_COLOR);
+		
+}
+
+
+void PibPoserApp::pose_snapshot() {
+	
+	std::fstream snapshot("shapshot.txt");
+	
+	for (int i = 0; i < BRICKLET_NUM; i++) {
+		for (int j = 0; j < 10; j++) {
+			
+		}
+	}
+	
+	snapshot.close();
+	
+	
 }
