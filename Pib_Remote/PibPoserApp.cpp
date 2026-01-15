@@ -147,6 +147,8 @@ void PibPoserApp::update_ext() {
 	if (snapshot_requested) {
 		pose_snapshot();
 		SDL_Delay(SELECTION_DELAY);
+		snapshot_requested = false;
+		SDL_Delay(SELECTION_DELAY);
 	}
 	
 	
@@ -245,13 +247,15 @@ void PibPoserApp::update_info_surface(uint8_t b, uint8_t s) {
 
 void PibPoserApp::pose_snapshot() {
 	
-	std::fstream snapshot("shapshot.txt");
+	std::ofstream snapshot("snapshot.txt");
 	
 	for (int i = 0; i < BRICKLET_NUM; i++) {
 		for (int j = 0; j < 10; j++) {
-			
+			snapshot << i << "," << j << "," << (int)servo_positions[i][j] << "\n"; 
 		}
 	}
+	
+	std::cout << "snapshot taken!\n";
 	
 	snapshot.close();
 	
