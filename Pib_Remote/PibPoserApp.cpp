@@ -56,7 +56,7 @@ PibPoserApp::~PibPoserApp() {
 
 void PibPoserApp::events_ext() {
 	
-	if (key_states[SDL_SCANCODE_SPACE]) {
+	if (key_states[SDL_SCANCODE_TAB]) {
 		next_bricklet = (selected_bricklet + 1) % BRICKLET_NUM;
 	}
 	
@@ -236,7 +236,7 @@ void PibPoserApp::draw_pos_info_surfaces() {
 
 void PibPoserApp::update_info_surface(uint8_t b, uint8_t s) {
 	
-	std::string value_string = std::to_string(servo_positions[b][s]);
+	std::string value_string = std::to_string((int)servo_positions[b][s]);
 			
 	pos_info_surfaces[b][s] = TTF_RenderText_Blended(font_ptr, value_string.c_str(), 0, FONT_COLOR);
 		

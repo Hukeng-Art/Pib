@@ -77,7 +77,19 @@ class ServoControl {
 				inversion.push_back(new_vec);
 			}
 			// magic number(s) - inversion data for current hardware build
-			inversion[0][3] = -1; 
+			inversion[0][0] = -1;
+			inversion[0][1] = -1;
+			inversion[0][3] = -1;
+			inversion[0][6] = -1;
+			inversion[1][4] = -1;
+			inversion[1][8] = -1;
+			inversion[1][9] = -1;
+			inversion[2][0] = -1;
+			inversion[2][1] = -1; 
+			inversion[2][3] = -1; 
+			inversion[2][6] = -1; 
+			inversion[2][7] = -1; 
+			inversion[2][9] = -1;        
 			
 		}
 		

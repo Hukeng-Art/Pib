@@ -23,12 +23,12 @@
 #define BREATHER_DELAY 10    // required to prevent brick hat buffer congestion
 #define SELECTION_DELAY 100
 
-#define FONT_PATH "/usr/share/fonts/truetype/freefont/FreeSans.ttf"
+#define FONT_PATH "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 #define FONT_SIZE 20
 #define FONT_COLOR (SDL_Color){255,255,255,255}
 #define SELECTED_COLOR (SDL_Color){0,255,0,255}
 #define VERTICAL_SPACING 10
-#define CELL_WIDTH 200
+#define CELL_WIDTH 100
 
 
 class PibPoserApp : public SDL_Application {
