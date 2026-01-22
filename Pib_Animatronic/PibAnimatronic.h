@@ -1,5 +1,5 @@
-#ifndef PIB_REMOTE_APP_H
-#define PIB_REMOTE_APP_H
+#ifndef PIB_ANIMATRONIC_APP_H
+#define PIB_ANIMATRONIC_APP_H
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
@@ -18,6 +18,34 @@
 #include "../Pib_Tinkerforge/Classes/Robot.cpp"
 #include "../Pib_Tinkerforge/Classes/Behaviors/Animatronic.cpp"
 #include "../../SDL_Application/SDL_Application.cpp"
+
+
+class PibAnimatronic : public SDL_Application {
+
+	Robot* robot;
+	Animatronic* current_animatronic;
+	
+	std::vector<SDL_Texture*> pib_eyes;
+	
+	double eye_counter;
+	int8_t eye_index;
+	
+	
+	const char* window_title = "Pib_Animatronic";
+	
+	
+	public:
+		PibAnimatronic();
+		~PibAnimatronic();
+		
+	
+	private:
+	
+		void events_ext();
+		void update_ext();
+		void draw_ext();
+	
+};
 
 #endif
 

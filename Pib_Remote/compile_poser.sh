@@ -1,1 +1,1 @@
-g++  main_poser.cpp ../Pib_Tinkerforge/Resources/brick_hat.c ../Pib_Tinkerforge/Resources/bricklet_servo_v2.c ../Pib_Tinkerforge/Resources/ip_connection.c ../Pib_Tinkerforge/Resources/bricklet_solid_state_relay_v2.c -o main_poser.o -lSDL3 -lSDL3_image -lSDL3_ttf 
+g++  -I../Pib_Tinkerforge/Resources main_poser.cpp ../Pib_Tinkerforge/Resources/brick_hat.c ../Pib_Tinkerforge/Resources/bricklet_servo_v2.c ../Pib_Tinkerforge/Resources/ip_connection.c ../Pib_Tinkerforge/Resources/bricklet_solid_state_relay_v2.c -o main_poser.o -lSDL3 -lSDL3_image -lSDL3_ttf -lSDL3_mixer

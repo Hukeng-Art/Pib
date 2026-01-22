@@ -57,9 +57,9 @@ class PibPoserApp : public SDL_Application {
 		
 	private:
 		
-		void events_ext() override;
-		void update_ext() override;
-		void draw_ext() override;
+		void events_ext();
+		void update_ext();
+		void draw_ext();
 		
 		void draw_pos_info_surfaces();
 		void draw_selection_rect();

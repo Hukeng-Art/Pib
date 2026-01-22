@@ -1,5 +1,2 @@
-#include "Robot.h"
+#include "SensorControl.h"
 
-class SensorControl {
-	
-};

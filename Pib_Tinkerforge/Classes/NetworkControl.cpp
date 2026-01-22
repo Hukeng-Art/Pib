@@ -1,5 +1,3 @@
+#include "NetworkControl.h"
 
 
-class NetworkControl {
-	
-};

@@ -1,66 +1,43 @@
+#include "Behavior.h"
 
-class Behavior {
+
+Behavior::Behavior() {
 	
-	protected:
-		ServoControl* servos;
-		SensorControl* sensors;
-		NetworkControl* network;
-		
-		clock_t start;
-		clock_t end;
-		double delta;
-		
-		bool is_running  = false;
+	delta = 0;
+
+}
+
+
+void Behavior::run() { // run a constant refresh loop, 
 	
-	public:
+	while (is_running) {
+		update_delta();
+		tick(delta);
+	}
 	
-		Behavior() {
-			
-			delta = 0;
-
-		}
-		
-		
-		void run() { // run a constant refresh loop, 
-			
-			while (is_running) {
-				update_delta();
-				tick(delta);
-			}
-			
-		}
+}
 
 
-		void assign_servos(ServoControl* robot_servos) {
-			servos = robot_servos;
-		}
-		
-		
-		void assign_sensors(SensorControl* robot_sensors) {
-			sensors = robot_sensors;
-		}
-		
-		
-		void assign_network(NetworkControl* robot_network) {
-			network = robot_network;
-		}
-		
-		
-		void set_running(bool value) {
-			is_running = value;
-		}
+void Behavior::assign_servos(ServoControl* robot_servos) {
+	servos = robot_servos;
+}
 
-		
-		// run a single refresh cycle
-		// pass delta to determine time elapsed since last update
-		// call to include Behavior refresh as part of external refresh cycle
-		// (e.g. in update() function in run() loop of SDL_Application object)
-		virtual void tick(double ext_delta) {} // extend in subclass
-		
-	private:
+
+void Behavior::assign_sensors(SensorControl* robot_sensors) {
+	sensors = robot_sensors;
+}
+
+
+void Behavior::assign_network(NetworkControl* robot_network) {
+	network = robot_network;
+}
+
+
+void Behavior::set_running(bool value) {
+	is_running = value;
+}
+
+// TO DO: CLOCK IMPLEMENTATION 
+void Behavior::update_delta() { // update delta variable (time elapsed since last refresh cycle)
 	
-		void update_delta() { // update delta variable (time elapsed since last refresh cycle)
-			
-		}
-
-};
+}

@@ -3,10 +3,7 @@
 #include <chrono>
 #include <thread>
 
-#include "Classes/Robot.cpp"
-
-
-using namespace std;
+#include "Robot.cpp"
 
 
 int main() {
