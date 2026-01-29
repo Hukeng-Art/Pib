@@ -10,9 +10,7 @@
 
 #include <map>
 
-#ifndef SDL_FLAGS
-#define SDL_FLAGS (SDL_INIT_VIDEO | SDL_INIT_AUDIO)
-#endif
+#define SDL_FLAGS_AUDIOVIDEO (SDL_INIT_VIDEO | SDL_INIT_AUDIO)
 
 #define AUDIOVIDEO_WIN_TITLE "pib_eyes"
 #define AUDIOVIDEO_WIN_HEIGHT 500
@@ -41,7 +39,7 @@ class AudioVideoControl {
 	AudioVideoControl();
 	~AudioVideoControl();
 	
-	void play_sound(std::string id);
+	void play_sfx(std::string id);
 	void play_music(std::string id);
 	
 	void push_audio(std::string id, std::string path);

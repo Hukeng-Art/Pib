@@ -4,7 +4,7 @@
 // window can not be closed manually, is only closed upon Robot class deletion
 AudioVideoControl::AudioVideoControl() {
 	
-	if (!SDL_Init(SDL_FLAGS)) { // Initialize SDL module
+	if (!SDL_Init(SDL_FLAGS_AUDIOVIDEO)) { // Initialize SDL module
 		throw std::runtime_error("Error initiating SDL.\n");
 	}
 	
@@ -79,7 +79,7 @@ AudioVideoControl::~AudioVideoControl() {
 }
 
 
-void AudioVideoControl::play_sound(std::string id) {
+void AudioVideoControl::play_sfx(std::string id) {
 	
 	if (audios.find(id) == audios.end()) {
 		fprintf(stderr, "Error - id \"%s\" does not match any loaded track.\n", id.data());

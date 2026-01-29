@@ -133,29 +133,27 @@ void Animatronic::load_script(std::string script_file) {
 		
 		std::vector<std::string> command_vec = split_line(line, ",");
 		
+		animatronicCommand new_command;
+		
 		if (command_vec[0] == "p") { // load position commmand
 			
-			positionCommand new_command;
-			
 			new_command.type = command_vec[0];
-			new_command.start = std::stod(substring_vec[1]);
-			new_command.end = std::stod(substring_vec[2]);
-			new_command.bricklet = std::stoi(substring_vec[3]);
-			new_command.servo = std::stoi(substring_vec[4]);
-			new_command.pos = std::stoi(substring_vec[5]);
+			new_command.start = std::stod(command_vec[1]);
+			new_command.end = std::stod(command_vec[2]);
+			new_command.bricklet = std::stoi(command_vec[3]);
+			new_command.servo = std::stoi(command_vec[4]);
+			new_command.pos = std::stoi(command_vec[5]);
 			
 			if (new_command.end > program_duration) {
 				program_duration = new_command.end;
 			}
 			
-			program.push(new_command);
 			
-		} else if (command_vec[0] == "s" || command_vec[0] == "m" || command_vec[0] == "i") { // load audio command
-			audiovideoCommand new_command;
+		} else if (command_vec[0] == "s" || command_vec[0] == "m" || command_vec[0] == "i") {
 			
 			new_command.type = command_vec[0];
-			new_command.start = std::string(substring_vec[1]);
-			new_command.id = std::stod(substring_vec[2]);
+			new_command.start = std::stod(command_vec[1]);
+			new_command.id = command_vec[2];
 		}
 		
 		program.push(new_command);
@@ -197,5 +195,5 @@ std::vector<std::string> split_line(std::string line, std::string del) {
 	
 	substring_vec.push_back(line.substr(pos_start));
 
-	return substring_vec
+	return substring_vec;
 }
