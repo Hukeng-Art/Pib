@@ -10,16 +10,18 @@
 #include "ServoControl.cpp"
 #include "SensorControl.cpp"
 #include "NetworkControl.cpp"
+#include "AudioVideoControl.cpp"
 #include "Behavior.cpp"
 
 class Robot {
 	
 	public:
 		
-		ServoControl* servos;
-		SensorControl* sensors;
-		NetworkControl* network;
-		Behavior* behavior;
+		ServoControl *servos;
+		SensorControl *sensors;
+		NetworkControl *network;
+		AudioVideoControl *audiovideo;
+		Behavior *behavior;
 		
 		
 	public:
@@ -27,7 +29,7 @@ class Robot {
 		Robot(std::string settings_path);
 		~Robot();
 		
-		void assign_behavior(Behavior* new_behavior);
+		void assign_behavior(Behavior *new_behavior);
 		void run_behavior();
 		
 };

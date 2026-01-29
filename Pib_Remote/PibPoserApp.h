@@ -12,6 +12,7 @@
 #include <time.h>
 #include <math.h>
 #include <iostream>
+#include <fstream>
 #include <memory>
 #include <vector>
 

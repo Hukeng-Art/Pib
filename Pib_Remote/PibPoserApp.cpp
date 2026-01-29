@@ -146,30 +146,31 @@ void PibPoserApp::update_ext() {
 	
 	if (snapshot_requested) {
 		pose_snapshot();
+		snapshot_requested = false;
 		SDL_Delay(SELECTION_DELAY);
 	}
 	
 	
-	for (int i = 0; i < BRICKLET_NUM; i++) {
-		for (int j = 0; j < 10; j++) {
-			if (moving_servos[i][j] != 0) {
+	for (int b = 0; b < BRICKLET_NUM; b++) {
+		for (int s = 0; s < 10; s++) {
+			if (moving_servos[b][s] != 0) {
 				
-				servo_positions[i][j] += SERVO_SPEED * moving_servos[i][j] * delta;
+				servo_positions[b][s] += SERVO_SPEED * moving_servos[b][s] * delta;
 				
 				// putting everything in one statement causes unexpected behavior
-				if (servo_positions[i][j] > 9000) {
-					servo_positions[i][j] = 9000;
-				} else if (servo_positions[i][j] < -9000) {
-					servo_positions[i][j] = -9000;
+				if (servo_positions[b][s] > 9000) {
+					servo_positions[b][s] = 9000;
+				} else if (servo_positions[b][s] < -9000) {
+					servo_positions[b][s] = -9000;
 				}
 				
-				robot->servos->set_servo_pos(i, j, (int)(servo_positions[i][j]));
-				moving_servos[i][j] = 0;
+				robot->servos->set_servo_pos(b, s, (int)(servo_positions[b][s]));
+				moving_servos[b][s] = 0;
 				
 				// update position info surface for display
-				update_info_surface(i,j);
+				update_info_surface(b,s);
 				
-				if (!pos_info_surfaces[i][j]) {
+				if (!pos_info_surfaces[b][s]) {
 					throw std::runtime_error("Error updating info text.");
 				}
 				
@@ -211,17 +212,17 @@ void PibPoserApp::draw_selection_rect() {
 
 void PibPoserApp::draw_pos_info_surfaces() {
 	
-	for (int i = 0; i < BRICKLET_NUM; i++) {
-		for (int j = 0; j < 10; j++) {
+	for (int b = 0; b < BRICKLET_NUM; b++) {
+		for (int s = 0; s < 10; s++) {
 			
 			SDL_FRect target_rect = (SDL_FRect){
-				(float)(VERTICAL_SPACING + i * CELL_WIDTH + i * VERTICAL_SPACING),
-				(float)(VERTICAL_SPACING + j * FONT_SIZE + j * VERTICAL_SPACING), 
+				(float)(VERTICAL_SPACING + b * CELL_WIDTH + b * VERTICAL_SPACING),
+				(float)(VERTICAL_SPACING + s * FONT_SIZE + s * VERTICAL_SPACING), 
 				(float)CELL_WIDTH,
 				(float)FONT_SIZE
 			};
 			
-			SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, pos_info_surfaces[i][j]);
+			SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, pos_info_surfaces[b][s]);
 			
 			SDL_RenderTexture(renderer, texture, NULL, &target_rect);
 			
@@ -247,13 +248,20 @@ void PibPoserApp::pose_snapshot() {
 	
 	std::fstream snapshot("shapshot.txt");
 	
-	for (int i = 0; i < BRICKLET_NUM; i++) {
-		for (int j = 0; j < 10; j++) {
-			
+	for (int b = 0; b < BRICKLET_NUM; b++) {
+		for (int s = 0; s < 10; s++) {
+			snapshot
+			<< b
+			<< ","
+			<< s
+			<< ","
+			<< std::to_string((int)servo_positions[b][s])
+			<< "\n";
 		}
+		
+		std::cout << "snapshot taken!\n";
 	}
 	
 	snapshot.close();
-	
 	
 }

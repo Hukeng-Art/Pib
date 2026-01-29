@@ -18,18 +18,22 @@ void Behavior::run() { // run a constant refresh loop,
 }
 
 
-void Behavior::assign_servos(ServoControl* robot_servos) {
+void Behavior::assign_servos(ServoControl *robot_servos) {
 	servos = robot_servos;
 }
 
 
-void Behavior::assign_sensors(SensorControl* robot_sensors) {
+void Behavior::assign_sensors(SensorControl *robot_sensors) {
 	sensors = robot_sensors;
 }
 
 
-void Behavior::assign_network(NetworkControl* robot_network) {
+void Behavior::assign_network(NetworkControl *robot_network) {
 	network = robot_network;
+}
+
+void Behavior::assing_audiovideo(AudioVideoControl *robot_audiovideo) {
+	audiovideo = robot_audiovideo;
 }
 
 

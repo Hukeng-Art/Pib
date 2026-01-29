@@ -4,9 +4,10 @@
 class Behavior {
 	
 	protected:
-		ServoControl* servos;
-		SensorControl* sensors;
-		NetworkControl* network;
+		ServoControl *servos;
+		SensorControl *sensors;
+		NetworkControl *network;
+		AudioVideoControl *audiovideo;
 		
 		clock_t start;
 		clock_t end;
@@ -21,9 +22,10 @@ class Behavior {
 		void set_running(bool value);
 		void run();
 
-		void assign_servos(ServoControl* robot_servos);
-		void assign_sensors(SensorControl* robot_sensors);
-		void assign_network(NetworkControl* robot_network);
+		void assign_servos(ServoControl *robot_servos);
+		void assign_sensors(SensorControl *robot_sensors);
+		void assign_network(NetworkControl *robot_network);
+		void assing_audiovideo(AudioVideoControl *robot_audiovideo);
 		
 		// run a single refresh cycle
 		// pass delta to determine time elapsed since last update
