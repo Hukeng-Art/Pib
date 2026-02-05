@@ -31,6 +31,7 @@ class Robot {
 		
 		void assign_behavior(Behavior *new_behavior);
 		void run_behavior();
+		void reset_defaults();
 		
 };
 

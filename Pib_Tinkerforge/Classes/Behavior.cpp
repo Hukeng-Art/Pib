@@ -32,7 +32,7 @@ void Behavior::assign_network(NetworkControl *robot_network) {
 	network = robot_network;
 }
 
-void Behavior::assing_audiovideo(AudioVideoControl *robot_audiovideo) {
+void Behavior::assign_audiovideo(AudioVideoControl *robot_audiovideo) {
 	audiovideo = robot_audiovideo;
 }
 

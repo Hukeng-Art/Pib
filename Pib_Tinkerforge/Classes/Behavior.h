@@ -25,7 +25,7 @@ class Behavior {
 		void assign_servos(ServoControl *robot_servos);
 		void assign_sensors(SensorControl *robot_sensors);
 		void assign_network(NetworkControl *robot_network);
-		void assing_audiovideo(AudioVideoControl *robot_audiovideo);
+		void assign_audiovideo(AudioVideoControl *robot_audiovideo);
 		
 		// run a single refresh cycle
 		// pass delta to determine time elapsed since last update

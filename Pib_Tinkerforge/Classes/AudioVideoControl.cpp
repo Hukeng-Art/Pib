@@ -5,17 +5,17 @@
 AudioVideoControl::AudioVideoControl() {
 	
 	if (!SDL_Init(SDL_FLAGS_AUDIOVIDEO)) { // Initialize SDL module
-		throw std::runtime_error("Error initiating SDL.\n");
+		throw std::runtime_error("Error initiating SDL for AudioVideo.\n");
 	}
 	
 	
 	if (!TTF_Init()) { // initialize TTF module
-		throw std::runtime_error("Error initiating TTF.\n");
+		throw std::runtime_error("Error initiating TTF for AudioVideo.\n");
 	}
 	
 	
 	if (!MIX_Init()) { // initialize Mixer module (audio)
-		throw std::runtime_error("Error initiating MIX.\n");
+		throw std::runtime_error("Error initiating MIX for AudioVideo.\n");
 	}
 	
 	
@@ -26,13 +26,13 @@ AudioVideoControl::AudioVideoControl() {
 		throw std::runtime_error("Error creating window.\n");
 	}
 	
-	// set window to resizable (true by default in this implementation)
+	// set window to resizable
 	SDL_SetWindowResizable(window, true);
 	
 	// SDL_CreateRenderer() returns pointer to renderer for window
 	renderer = SDL_CreateRenderer(window, NULL);
 	
-	// check if pointer is populated (not null) (alt: if (renderer == NULL))
+	// check if renderer pointer is populated 
 	if (!renderer) {
 		throw std::runtime_error("Error creating Renderer.\n");
 	}

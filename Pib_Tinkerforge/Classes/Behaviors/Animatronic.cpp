@@ -19,9 +19,6 @@ Animatronic::Animatronic(std::string path) {
 
 Animatronic::~Animatronic() {
 	
-	if (servos) {
-		servos->reset_servos();
-	}
 }
 
 
