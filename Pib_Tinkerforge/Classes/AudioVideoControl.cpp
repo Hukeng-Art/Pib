@@ -18,7 +18,7 @@ AudioVideoControl::AudioVideoControl() {
 		throw std::runtime_error("Error initiating MIX for AudioVideo.\n");
 	}
 	
-	
+		
 	// create window pointer
 	window = SDL_CreateWindow(AUDIOVIDEO_WIN_TITLE, AUDIOVIDEO_WIN_WIDTH, AUDIOVIDEO_WIN_HEIGHT, 0);
 	
@@ -48,7 +48,9 @@ AudioVideoControl::AudioVideoControl() {
 	mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &audiospec);
 	sfx_track = MIX_CreateTrack(mixer);
 	music_track = MIX_CreateTrack(mixer);
-
+	
+	// call update() once to open window
+	update(0);
 }
 
 
@@ -155,7 +157,7 @@ void AudioVideoControl::push_image(std::string id, std::string path) {
 
 void AudioVideoControl::free_image(std::string id) {
 	if (images.find(id) == images.end()) {
-		fprintf(stderr, "Error deleting image - id \"%s\" does not match any loaded audio.\n", id.data());
+		fprintf(stderr, "Error deleting image - id \"%s\" does not match any loaded image.\n", id.data());
 		return;
 	}
 	
@@ -175,3 +177,13 @@ void AudioVideoControl::draw_image() {
 	SDL_RenderTexture(renderer, current_image, NULL, NULL);
 }
 
+void AudioVideoControl::update(double delta) {
+	
+	SDL_RenderClear(renderer);
+	
+	if (current_image) {
+		draw_image();
+	}
+	
+	SDL_RenderPresent(renderer);
+}

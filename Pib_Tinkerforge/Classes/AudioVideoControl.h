@@ -52,6 +52,7 @@ class AudioVideoControl {
 	void free_images();
 
 	void draw_image();
+	void update(double delta);
 	
 		
 };

@@ -82,6 +82,8 @@ void Animatronic::tick(double external_delta) {
 			iterations--;
 		}
 	}
+	
+	audiovideo->update(external_delta);
 }
 
 

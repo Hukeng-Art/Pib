@@ -25,17 +25,14 @@ PibAnimatronic::~PibAnimatronic() {
 	delete robot;
 	delete current_animatronic;
 	
-	for (SDL_Texture* texture : pib_eyes) {
-	
-		if (texture) {
-			SDL_DestroyTexture(texture);
-			texture = NULL;
-		}
-	}	
 }
 
 
 void PibAnimatronic::events_ext() {
+	
+	if (key_states[SDL_SCANCODE_ESCAPE]) { // close application
+		is_running = false;
+	}
 	
 	if (key_states[SDL_SCANCODE_R]) { // reset behaviour
 		current_animatronic->reset();
