@@ -1,4 +1,4 @@
-g++  main_poser.cpp -o main_poser.o \
+g++ faceAudioTest.cpp -o faceAudioTest.o \
 	-I../Pib_Tinkerforge/Resources \
 	-I../Pib_Tinkerforge/Classes  \
 	-L/usr/local/lib \
@@ -7,3 +7,4 @@ g++  main_poser.cpp -o main_poser.o \
 	../Pib_Tinkerforge/Resources/ip_connection.c \
 	../Pib_Tinkerforge/Resources/bricklet_solid_state_relay_v2.c \
 	-lSDL3 -lSDL3_image -lSDL3_ttf -lSDL3_mixer
+
