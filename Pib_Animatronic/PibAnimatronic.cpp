@@ -5,12 +5,14 @@ PibAnimatronic::PibAnimatronic() {
 	
 	robot = new Robot("a");
 	
-	current_animatronic = new Animatronic("Scripts/hand_test.txt");
+	current_animatronic = new Animatronic();
 	
 	robot->servos->set_servo_pos(0, 8, -4500);
 	robot->servos->set_servo_pos(2, 8, -4500);
 	
 	robot->assign_behavior(current_animatronic);
+	
+	current_animatronic->load_script("Scripts/hand_test.txt");
 	
 }
 

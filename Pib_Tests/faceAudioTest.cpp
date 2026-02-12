@@ -10,24 +10,24 @@ int main() {
 	robot->audiovideo->push_image("eyes_02", "assets/pibEyes/eyes02.png");
 	
 	std::cout << "Display files loaded. Press any key to continue.\n";
-	system("pause");
+	getchar();
 	
 	robot->audiovideo->set_image("eyes_01");
 	robot->audiovideo->update(1.0);
 	
 	std::cout << "Eyes_01 set. Press any key to continue.\n";
-	system("pause");
+	getchar();
 	
 	robot->audiovideo->set_image("eyes_02");
 	robot->audiovideo->update(1.0);
 	
 	std::cout << "Eyes_02 set. Press any key to continue.\n";
-	system("pause");
+	getchar();
 	
 	robot->audiovideo->play_sfx("front_center");
 	
 	std::cout << "Sound effect played. Press any key to end program.\n";
-	system("pause");
+	getchar();
 	
 	
 	delete robot;

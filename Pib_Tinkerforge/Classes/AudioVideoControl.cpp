@@ -51,6 +51,8 @@ AudioVideoControl::AudioVideoControl() {
 	
 	// call update() once to open window
 	update(0);
+	
+	std::cout << "Audio Video Control online.\n";
 }
 
 

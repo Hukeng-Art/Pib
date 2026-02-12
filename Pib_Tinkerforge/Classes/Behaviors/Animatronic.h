@@ -26,7 +26,7 @@ class Animatronic : public Behavior {
 	
 	public:
 	
-		Animatronic(std::string path);
+		Animatronic();
 		~Animatronic();
 		
 		void tick(double external_delta);

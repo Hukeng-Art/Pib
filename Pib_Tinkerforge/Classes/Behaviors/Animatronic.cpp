@@ -3,11 +3,7 @@
 // UTILITY FUNCS - TO DO: MOVE TO EXTERNAL PACKAGE
 std::vector<std::string> split_line(std::string line, std::string del);
 	
-Animatronic::Animatronic(std::string path) {
-	
-	script_path = path;
-	
-	load_script(script_path);
+Animatronic::Animatronic() {
 	
 	reset();
 	
@@ -105,6 +101,7 @@ void Animatronic::load_script(std::string script_file) {
 	
 	while (getline(f,line)) { // LOOP THROUGH ALL LINES
 		
+
 		if (line == "#AUDIOS") { // preload audios into AudioVideoControl
 			getline(f,line);
 			
@@ -122,7 +119,7 @@ void Animatronic::load_script(std::string script_file) {
 			
 			while (line != "#END_IMAGES") {
 				std::vector<std::string> import_info = split_line(line, ",");
-				audiovideo -> push_image(import_info[0], import_info[1]);
+				audiovideo -> push_image(import_info[0], import_info[1]);	
 				getline(f,line);
 			}
 			
