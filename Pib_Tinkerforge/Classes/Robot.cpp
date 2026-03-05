@@ -68,7 +68,9 @@ robotSettingsStruct Robot::read_settings(std::string settings_path) {
 		std::vector<std::string> current_line = split_line(line," ");
 		
 		if (current_line[0] == "#HOST") {
-			settings.host = current_line[1].c_str();
+			settings.host = current_line[1];
+			//std::cout << "settings host: " << settings.host << "\n";
+			
 		}
 		
 		if (current_line[0] == "#PORT") {
@@ -76,14 +78,14 @@ robotSettingsStruct Robot::read_settings(std::string settings_path) {
 		}
 		
 		if (current_line[0] == "#SOLID_STATE_RELAY_UIDS") {
-			for (uint8_t i = 0; i < current_line.size(); i++) {
-				settings.solid_state_relay_uids.push_back(current_line[i].c_str());
+			for (uint8_t i = 1; i < current_line.size(); i++) {
+				settings.solid_state_relay_uids.push_back(current_line[i]);
 			}
 		}
 		
 		if (current_line[0] == "#SERVO_BRICKLET_UIDS") {
-			for (uint8_t i = 0; i < current_line.size(); i++) {
-				settings.servo_bricklet_uids.push_back(current_line[i].c_str());
+			for (uint8_t i = 1; i < current_line.size(); i++) {
+				settings.servo_bricklet_uids.push_back(current_line[i]);
 			}
 		}
 		

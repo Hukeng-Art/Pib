@@ -25,6 +25,7 @@
 #define SELECTION_DELAY 100
 
 #define FONT_PATH "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
+#define PIB_POSER_SETTINGS_PATH "../Pib_Settings/Pib01_SETTINGS.txt"
 #define FONT_SIZE 20
 #define FONT_COLOR (SDL_Color){255,255,255,255}
 #define SELECTED_COLOR (SDL_Color){0,255,0,255}

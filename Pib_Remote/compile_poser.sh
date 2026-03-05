@@ -1,6 +1,7 @@
 g++  main_poser.cpp -o main_poser.o \
 	-I../Pib_Tinkerforge/Resources \
 	-I../Pib_Tinkerforge/Classes  \
+	-I../Pib_Tinkerforge/Structs  \
 	-L/usr/local/lib \
 	../Pib_Tinkerforge/Resources/brick_hat.c \
 	../Pib_Tinkerforge/Resources/bricklet_servo_v2.c \

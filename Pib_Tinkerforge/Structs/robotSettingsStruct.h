@@ -1,11 +1,11 @@
 #include <vector>
 
 struct robotSettingsStruct {
-	const char* host;
+	std::string host;
 	uint16_t port;
 	
-	std::vector<const char*> solid_state_relay_uids;
-	std::vector<const char*> servo_bricklet_uids;
+	std::vector<std::string> solid_state_relay_uids;
+	std::vector<std::string> servo_bricklet_uids;
 	
 	int16_t default_servo_degree_min;
 	int16_t default_servo_degree_max;

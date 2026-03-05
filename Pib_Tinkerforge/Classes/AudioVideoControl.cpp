@@ -79,6 +79,8 @@ AudioVideoControl::~AudioVideoControl() {
 	MIX_Quit();         // take mixer module offline
 	TTF_Quit();         // take ttf module offline
 	SDL_Quit();         // take module offline after unallocating memory
+	
+	std::cout << "Audio Video Control offline."
 
 }
 

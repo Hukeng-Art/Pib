@@ -2,7 +2,7 @@
 
 
 PibPoserApp::PibPoserApp() {
-	robot = new Robot("a");
+	robot = new Robot(PIB_POSER_SETTINGS_PATH);
 	
 	servo_positions[0][8] = -4500;
 	servo_positions[2][8] = -4500;
@@ -55,6 +55,10 @@ PibPoserApp::~PibPoserApp() {
 
 
 void PibPoserApp::events_ext() {
+	
+	if (key_states[SDL_SCANCODE_ESCAPE]) { // close application
+		is_running = false;
+	}
 	
 	if (key_states[SDL_SCANCODE_TAB]) {
 		next_bricklet = (selected_bricklet + 1) % BRICKLET_NUM;
