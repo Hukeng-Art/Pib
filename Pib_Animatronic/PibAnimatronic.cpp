@@ -3,7 +3,7 @@
 
 PibAnimatronic::PibAnimatronic() {
 	
-	robot = new Robot("a");
+	robot = new Robot(PIB_ANIMATRONIC_SETTINGS_PATH);
 	
 	current_animatronic = new Animatronic();
 	

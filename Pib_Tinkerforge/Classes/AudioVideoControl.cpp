@@ -2,7 +2,7 @@
 
 // constructor mostly copypasted from SDL_Application
 // window can not be closed manually, is only closed upon Robot class deletion
-AudioVideoControl::AudioVideoControl() {
+AudioVideoControl::AudioVideoControl(robotSettingsStruct settings) {
 	
 	if (!SDL_Init(SDL_FLAGS_AUDIOVIDEO)) { // Initialize SDL module
 		throw std::runtime_error("Error initiating SDL for AudioVideo.\n");

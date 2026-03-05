@@ -1,12 +1,85 @@
 #include "ServoControl.h"
 
-ServoControl::ServoControl() {
+ServoControl::ServoControl(robotSettingsStruct settings) {
 	
 	///////////////////////////////////////////////////
 	// TO DO: import robot info from settings struct //
 	///////////////////////////////////////////////////
 	
+	// set default servo settings
+	default_servo_degree_min = settings.default_servo_degree_min;
+	default_servo_degree_max = settings.default_servo_degree_max;
+	default_servo_pulse_width_min = settings.default_servo_pulse_width_min;
+	default_servo_pulse_width_max = settings.default_servo_pulse_width_max;
+	default_servo_period = settings.default_servo_period;
+	default_servo_vel = settings.default_servo_vel;
+	default_servo_acc = settings.default_servo_acc;
+	default_servo_dec = settings.default_servo_dec;
+	
+	
+	// set up ssr IP connections and ssrs
+	for (const char* uid : settings.solid_state_relay_uids) {
+		IPConnection new_ipcon;
+		SolidStateRelayV2 new_ssr;
+		
+		ipcon_create(&new_ipcon);
+		solid_state_relay_v2_create(&new_ssr, uid, &new_ipcon);
+		
+		if(ipcon_connect(&new_ipcon, settings.host, settings.port) < 0) {
+			fprintf(stderr, "Could not connect - ipcon for solid state relay failed\n");
+			throw("Solid state relay ipcon connection failed\n");
+		}
+		
+		ssr_ipcons.push_back(new_ipcon);
+		ssrs.push_back(new_ssr);
+	}
+	
+	// set up servo bricklet IP connections and servo bricklets
+	for (const char* uid : settings.servo_bricklet_uids) {
+		IPConnection new_ipcon;
+		ServoV2 new_bricklet;
+		
+		ipcon_create(&new_ipcon);
+		servo_v2_create(&new_bricklet, uid, &new_ipcon);
+		
+		if(ipcon_connect(&new_ipcon, settings.host, settings.port) < 0) {
+			fprintf(stderr, "Could not connect - ipcon for solid state relay failed\n");
+			throw("Solid state relay ipcon connection failed\n");
+		}
+		
+		bricklet_ipcons.push_back(new_ipcon);
+		bricklets.push_back(new_bricklet);
+		
+	}
+	
+	// activate ssrs
+	for (SolidStateRelayV2 ssr : ssrs) {
+		solid_state_relay_v2_set_state(&ssr, true);
+	}
+	
+	// activate servos, set default values (pib standard, zero position)
+	reset_servos();
+	
+	// initialize inversion vector
+	for (uint8_t i = 0; i < bricklets.size(); i++) {
+		
+		std::vector<std::int8_t> new_vec;
+		for (uint8_t j = 0; j < BRICKLET_CONNECTIONS; j++) {
+			new_vec.push_back(settings.servo_inversion[i][j]);
+		}
+		
+		inversion.push_back(new_vec);
+	}
+	
+	
+	
+	///////////////
+	// TO DO END //
+	///////////////
+	
+	/*
 	std::vector<std::string> servo_uids = {SERVO_UID_0, SERVO_UID_1, SERVO_UID_2};
+	
 	
 	// create ipcon for solid state relay
 	ipcon_create(&ssr_ipcon);
@@ -17,6 +90,7 @@ ServoControl::ServoControl() {
 		fprintf(stderr, "Could not connect - ipcon for solid state bricklet failed\n");
 		throw("Solid state relay ipcon connection failed\n");
 	}
+	
 	
 	// initialize IP connections and bricklets
 	for (uint8_t i = 0; i < servo_uids.size(); i++) {
@@ -37,13 +111,15 @@ ServoControl::ServoControl() {
 			throw("Ipcon connection failed\n");
 		}
 		
-		// activate ssr
-		solid_state_relay_v2_set_state(&ssr, true);
-		
 	}
+
+	
+	// activate ssr
+	solid_state_relay_v2_set_state(&ssr, true);
 	
 	// activate servos, set default values (pib standard, zero position)
 	reset_servos();
+	
 	
 	// initialize inversion vector
 	// TO DO: import info from info.txt
@@ -69,14 +145,16 @@ ServoControl::ServoControl() {
 	inversion[2][3] = -1; 
 	inversion[2][6] = -1; 
 	inversion[2][7] = -1; 
-	inversion[2][9] = -1;        
+	inversion[2][9] = -1;
+	
+	* */ 
 	
 }
 
 ServoControl::~ServoControl() {
 	
+	// disable bricklet connections and free bricklets
 	std::cout << "\nDisabling bricklet connections\n";
-	
 	for (uint8_t i = 0; i < bricklets.size(); i++) {
 		for (uint8_t j = 0; j < BRICKLET_CONNECTIONS; j++) {
 				if (servo_v2_set_enable(&bricklets[i], j, false) < E_OK) {
@@ -85,23 +163,33 @@ ServoControl::~ServoControl() {
 		}
 		
 		servo_v2_destroy(&bricklets[i]);
-		ipcon_destroy(&ipcons[i]); // calls ipcon_disconnect internally
+		ipcon_destroy(&bricklet_ipcons[i]); // call ipcon_disconnect internally
 	}
 	
+	// disable ssr connections and free ssrs
+	std::cout << "\nDisabling ssd connections\n";
+	for (uint8_t i = 0; i < ssrs.size(); i++) {
+		solid_state_relay_v2_set_state(&ssrs[i], false);
+		solid_state_relay_v2_destroy(&ssrs[i]);
+		ipcon_destroy(&ssr_ipcons[i]); // call ipcon_disconnect internally	
+	}
+	
+	/*
 	// turn off ssd
 	solid_state_relay_v2_set_state(&ssr, false);
 	
 	std::cout << "\nDisabling solid state relay connection.\n";
 	solid_state_relay_v2_destroy(&ssr);
-	ipcon_destroy(&ssr_ipcon); // Calls ipcon_disconnect internally	
+	ipcon_destroy(&ssr_ipcon); // Calls ipcon_disconnect internally
+	* */
 	
 }
 
 
 // set servo positions
-void ServoControl::set_servo_pos(uint8_t bricklet, uint8_t servo, int16_t pos) {
-	servo_v2_set_position(&bricklets[bricklet], servo, pos * inversion[bricklet][servo]);
-	servo_v2_set_enable(&bricklets[bricklet], servo, true);
+void ServoControl::set_servo_pos(uint8_t b, uint8_t s, int16_t pos) {
+	servo_v2_set_position(&bricklets[b], s, pos * inversion[b][s]);
+	servo_v2_set_enable(&bricklets[b], s, true);
 }
 
 

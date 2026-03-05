@@ -1,7 +1,7 @@
 #include "Animatronic.h"
 
 // UTILITY FUNCS - TO DO: MOVE TO EXTERNAL PACKAGE
-std::vector<std::string> split_line(std::string line, std::string del);
+//std::vector<std::string> split_line(std::string line, std::string del);
 	
 Animatronic::Animatronic() {
 	
@@ -175,7 +175,7 @@ void Animatronic::set_iterations(int i) {
 }
 
 // UTILITY FUNCS
-
+/*
 std::vector<std::string> split_line(std::string line, std::string del) {
 	
 	std::vector<std::string> substring_vec;
@@ -193,3 +193,4 @@ std::vector<std::string> split_line(std::string line, std::string del) {
 
 	return substring_vec;
 }
+*/

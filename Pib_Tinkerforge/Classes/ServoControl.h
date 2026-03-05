@@ -32,17 +32,26 @@ class ServoControl {
 	
 	// ATTRIBUTES
 	private:
-		std::vector<IPConnection> ipcons;
+		std::vector<IPConnection> bricklet_ipcons;
 		std::vector<ServoV2> bricklets;
 		
-		IPConnection ssr_ipcon;
-		SolidStateRelayV2 ssr;
+		std::vector<IPConnection> ssr_ipcons;
+		std::vector<SolidStateRelayV2> ssrs;
 		
 		std::vector<std::vector<std::int8_t>> inversion;
-		std::vector<std::string> servo_uids;
+		
+		// default servo settings
+		int16_t default_servo_degree_min;
+		int16_t default_servo_degree_max;
+		uint32_t default_servo_pulse_width_min;
+		uint32_t default_servo_pulse_width_max;
+		uint32_t default_servo_period;
+		uint32_t default_servo_vel;
+		uint32_t default_servo_acc;
+		uint32_t default_servo_dec;
 		
 	public:
-		ServoControl();
+		ServoControl(robotSettingsStruct settings);
 		~ServoControl();
 		
 		

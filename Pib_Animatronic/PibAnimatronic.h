@@ -19,6 +19,8 @@
 #include "../Pib_Tinkerforge/Classes/Behaviors/Animatronic.cpp"
 #include "../../SDL_Application/SDL_Application.cpp"
 
+#define PIB_ANIMATRONIC_SETTINGS_PATH "../Pib_Settings/Pib01_SETTINGS.txt"
+
 
 class PibAnimatronic : public SDL_Application {
 

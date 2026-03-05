@@ -7,6 +7,8 @@
 #include <string>
 #include <time.h>
 
+#include "robotSettingsStruct.h"
+
 #include "ServoControl.cpp"
 #include "SensorControl.cpp"
 #include "NetworkControl.cpp"
@@ -32,6 +34,9 @@ class Robot {
 		void assign_behavior(Behavior *new_behavior);
 		void run_behavior();
 		void reset_defaults();
+	
+	private:
+		robotSettingsStruct read_settings(std::string settings_path);
 		
 };
 

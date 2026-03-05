@@ -36,23 +36,23 @@ class AudioVideoControl {
 	SDL_Texture* current_image;
 	
 	public:
-	AudioVideoControl();
-	~AudioVideoControl();
-	
-	void play_sfx(std::string id);
-	void play_music(std::string id);
-	
-	void push_audio(std::string id, std::string path);
-	void free_audio(std::string id);
-	void free_audios();
-	
-	void set_image(std::string id);
-	void push_image(std::string id, std::string path);
-	void free_image(std::string id);
-	void free_images();
+		AudioVideoControl(robotSettingsStruct settings);
+		~AudioVideoControl();
+		
+		void play_sfx(std::string id);
+		void play_music(std::string id);
+		
+		void push_audio(std::string id, std::string path);
+		void free_audio(std::string id);
+		void free_audios();
+		
+		void set_image(std::string id);
+		void push_image(std::string id, std::string path);
+		void free_image(std::string id);
+		void free_images();
 
-	void draw_image();
-	void update(double delta);
+		void draw_image();
+		void update(double delta);
 	
 		
 };
